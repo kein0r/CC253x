@@ -39,10 +39,9 @@ void CC253x_ActivatePowerMode(uint8 mode)
   /* TODO: Align following code on 2-byte boundary */
   PCON = PCON_IDLE_ENTERSLEEPMODE;
   nop();
-  /* wait until clock is set back to 32MHz external oscilator, i.e. 16MHz Rc
-   * oscilator is disabled, in order to use radio again. */
+  /* wait until clock is back up as configured. Especially if external 32MHz 
+   * oscilator is used together with wireless. */
   while (CLKCONSTA != CLKCONCMD) nop();
-  /* while ((CLKCONSTA & CLKCONCMD_OSC_RCOSC) != 0 ) nop(); */
 }
 
 /**
