@@ -39,7 +39,7 @@ void CC253x_ActivatePowerMode(uint8 mode)
   SLEEPCMD = mode & SLEEPCMD_MODE_MASK;
   /* activate mode */
   /* TODO: Align following code on 2-byte boundary */
-  PCON = PCON_IDLE_SET;
+  PCON = PCON_IDLE_ENTERSLEEPMODE;
   nop();
   /* wait until clock is set back to 32MHz external oscilator, i.e. 16MHz Rc
    * oscilator is disabled, in order to use radio again. */
@@ -59,9 +59,12 @@ void CC253x_IncrementSleepTimer(sleepTimer_t newSleepTimerValue)
   actualSleepTimerValue.ST2 = ST2;
   /* add desired sleep timer */
   actualSleepTimerValue.value += newSleepTimerValue.value;
+  /* wait until a new values is allowed to be written to the counter */
+  while (!STLOAD & STLOAD_LDRDY) nop();
   /* write value back. Write to ST0 will write complete time value */
   ST2 = actualSleepTimerValue.ST2;
   ST1 = actualSleepTimerValue.ST1;
   ST0 = actualSleepTimerValue.ST0;
   /* TODO: Check if IEN0.STIE needs to be enabled */
+  SleepTimerInterruptEnable();
 }

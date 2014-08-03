@@ -38,12 +38,17 @@
 /**
  * For easier reading of power  modes
 */
-#define PCON_IDLE_SET                                   0x01
+#define PCON_IDLE_ENTERSLEEPMODE                        0x01
 #define SLEEPCMD_MODE_PM3                               0x03
 #define SLEEPCMD_MODE_PM2                               0x02
 #define SLEEPCMD_MODE_PM1                               0x01
 #define SLEEPCMD_MODE_ACTIVE_IDLE                       0x00
 #define SLEEPCMD_MODE_MASK                              0x03
+
+#define STLOAD_LDRDY                                    0x01
+
+#define SleepTimerInterruptEnable()                     STIE = 0x1
+#define SleepTimerInterruptDisable()                    STIE = 0x0
    
 /*******************| Type definitions |*******************************/
 typedef union {
