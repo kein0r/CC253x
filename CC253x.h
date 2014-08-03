@@ -49,6 +49,7 @@
 
 #define SleepTimerInterruptEnable()                     STIE = 0x1
 #define SleepTimerInterruptDisable()                    STIE = 0x0
+#define SleepTimerInterruptClearFlag()                  STIF = 0x0
    
 /*******************| Type definitions |*******************************/
 typedef union {
