@@ -42,6 +42,8 @@ void CC253x_ActivatePowerMode(uint8 mode)
   /* wait until clock is back up as configured. Especially if external 32MHz 
    * oscilator is used together with wireless. */
   while (CLKCONSTA != CLKCONCMD) nop();
+  /* Finally clear interrupt flag for timer interrupt */
+  SleepTimerInterruptClearFlag();
 }
 
 /**
@@ -63,6 +65,6 @@ void CC253x_IncrementSleepTimer(sleepTimer_t newSleepTimerValue)
   ST2 = actualSleepTimerValue.ST2;
   ST1 = actualSleepTimerValue.ST1;
   ST0 = actualSleepTimerValue.ST0;
-  /* TODO: Check if IEN0.STIE needs to be enabled */
+  /* Enable sleep timer interrupt for wake-up */
   SleepTimerInterruptEnable();
 }
