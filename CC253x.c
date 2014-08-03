@@ -8,13 +8,11 @@
    @param: Timer ticks output setting. Cannot be higher than system clock setting given by OSC bit setting
    @param: clkSpeed Clock speed. Cannot be higher than system clock setting given by the OSC bit setting. Indicates current system-clock frequency
 **/
-void CC253x_Init( uint8 clkSource, uint8 tickSpeed, uint8 clkSpeed )
+void CC253x_Init( uint8 clkCmd )
 {
   /* external 32kHz clock source is never selected, default value is used */
-  CLKCONCMD |= clkSource;
-  CLKCONCMD |= tickSpeed;
-  CLKCONCMD |= clkSpeed;
-  /* wait until both clocks has stabilized */
+  CLKCONCMD = clkCmd;
+ /* wait until both clocks has stabilized */
   while (CLKCONSTA != CLKCONCMD) nop();
 }
 
@@ -43,7 +41,8 @@ void CC253x_ActivatePowerMode(uint8 mode)
   nop();
   /* wait until clock is set back to 32MHz external oscilator, i.e. 16MHz Rc
    * oscilator is disabled, in order to use radio again. */
-  while ((CLKCONSTA & CLKCONCMD_OSC_RCOSC) != 0 ) nop();
+  while (CLKCONSTA != CLKCONCMD) nop();
+  /* while ((CLKCONSTA & CLKCONCMD_OSC_RCOSC) != 0 ) nop(); */
 }
 
 /**

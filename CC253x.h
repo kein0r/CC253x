@@ -64,7 +64,7 @@ typedef union {
 
 /*******************| Function prototypes |****************************/
 
-void CC253x_Init( uint8 clkSource, uint8 tickSpeed, uint8 clkSpeed );
+void CC253x_Init( uint8 clkCmd );
 void CC253x_ActivatePowerMode(uint8 mode);
 void CC253x_IncrementSleepTimer(sleepTimer_t newSleepTimerValue);
 
