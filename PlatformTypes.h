@@ -13,8 +13,8 @@
 /**
  * Macros to access high and low part of 16bit word separately 
 */
-#define HI_UINT16(a)            (((uint16)(a) >> 8) & 0xFF)
-#define LO_UINT16(a)            ((uint16)(a) & 0xFF)
+#define HI_UINT16(a)            (((uint16_t)(a) >> 8) & 0xFF)
+#define LO_UINT16(a)            ((uint16_t)(a) & 0xFF)
    
 /*******************| Type definitions |*******************************/
 
@@ -32,7 +32,7 @@ typedef signed long sint32_t;
 
 /*******************| Function prototypes |****************************/
 
-void delay_us(uint16 usec);
+void delay_us(uint16_t usec);
 #endif
 
 /** @}*/

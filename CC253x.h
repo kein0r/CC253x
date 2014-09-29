@@ -53,11 +53,11 @@
    
 /*******************| Type definitions |*******************************/
 typedef union {
-  uint32 value;
+  uint32_t value;
   struct {
-    uint8 ST2;
-    uint8 ST1;
-    uint8 ST0;
+    uint8_t ST2;
+    uint8_t ST1;
+    uint8_t ST0;
   } ;
 } sleepTimer_t;
 
@@ -65,8 +65,8 @@ typedef union {
 
 /*******************| Function prototypes |****************************/
 
-void CC253x_Init( uint8 clkCmd );
-void CC253x_ActivatePowerMode(uint8 mode);
+void CC253x_Init( uint8_t clkCmd );
+void CC253x_ActivatePowerMode(uint8_t mode);
 void CC253x_IncrementSleepTimer(sleepTimer_t newSleepTimerValue);
 
 #endif

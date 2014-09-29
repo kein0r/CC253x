@@ -8,7 +8,7 @@
    @param: Timer ticks output setting. Cannot be higher than system clock setting given by OSC bit setting
    @param: clkSpeed Clock speed. Cannot be higher than system clock setting given by the OSC bit setting. Indicates current system-clock frequency
 **/
-void CC253x_Init( uint8 clkCmd )
+void CC253x_Init( uint8_t clkCmd )
 {
   /* external 32kHz clock source is never selected, default value is used */
   CLKCONCMD = clkCmd;
@@ -31,7 +31,7 @@ void CC253x_Init( uint8 clkCmd )
  * instruction, so the following instruction is not placed on a 4-byte boundary, 
  * as required."
 **/
-void CC253x_ActivatePowerMode(uint8 mode)
+void CC253x_ActivatePowerMode(uint8_t mode)
 {
   /* set desired mode */
   SLEEPCMD = mode & SLEEPCMD_MODE_MASK;
