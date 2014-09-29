@@ -11,6 +11,9 @@
 #error Board frequemcy must be set to 32MHz for UART to work properly
 #endif
 
+#if USART_BAUDRATE_DEFAULT != USART_Baudrate_9600
+#error USART_BAUDRATE_DEFAULT must be set to USART_Baudrate_9600
+#endif
 
 /*******************| Type definitions |*******************************/
 
