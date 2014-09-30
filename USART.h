@@ -8,9 +8,10 @@
 #include <PlatformTypes.h>
    
 /*******************| Macros |*****************************************/
-/** Do not change this value! It will be used internally. Default baudrate
+/** Do not change these values! It will be used internally. Default baudrate
  * will always be 9600 baud. Equally of the value set here */
 #define USART_BAUDRATE_DEFAULT  USART_Baudrate_9600
+#define USART_PARITY_DEFAULT  USART_Parity_8BitNoParity
    
 #define REGISTER_MASK_UxGCR_BAUD_E      0x1f
    
@@ -30,23 +31,31 @@
 #define USART_U0UCR_START_LOW           0x00
 #define USART_U0UCR_START_HIGH          0x01
 
+#define USART_flush()                   U0UCR |= USART_U0UCR_FLUSH
+
 /*******************| Type definitions |*******************************/
 typedef enum {
+  USART_Baudrate_1200 = 0,
+  USART_Baudrate_2400,
+  USART_Baudrate_4800,
   USART_Baudrate_9600,
-  USART_Baudrate_14400,
   USART_Baudrate_19200,
-  USART_Baudrate_28800,
   USART_Baudrate_38400,
   USART_Baudrate_57600,
-  USART_Baudrate_76800,
-  USART_Baudrate_115200,
-  USART_Baudrate_230400
+  USART_Baudrate_115200
 } USART_Baudrate_t;
+
+typedef enum {
+  USART_Parity_8BitNoParity = 0,
+  USART_Parity_8BitEvenParity,
+  USART_Parity_8BitOddParity
+} USART_Parity_t;
 
 /*******************| Global variables |*******************************/
 
 /*******************| Function prototypes |****************************/
-void USART_init(USART_Baudrate_t baudrate);
+void USART_setBaudrate(USART_Baudrate_t baudrate);
+void USART_setParity(USART_Parity_t parity);
 
 #endif
 /** @}*/
