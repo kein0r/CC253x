@@ -16,14 +16,14 @@
    
 #define USART_U0CSR_MODE_SPI            0x00
 #define USART_U0CSR_MODE_UART           0x80
-#define USART_U0CSR_RE_ENABLED          0x00
-#define USART_U0CSR_RE_DISABLED         0x40
+#define USART_U0CSR_RE_ENABLED          0x40
+#define USART_U0CSR_RE_DISABLED         0x00
 #define USART_U0CSR_SLAVE_SPI_MASTER    0x00
 #define USART_U0CSR_SLAVE_SPI_SLAVE     0x20
    
 #define USART_U0UCR_FLUSH               0x80
-#define USART_U0UCR_ENABLE_FLOW_DISABLE 0x40
-#define USART_U0UCR_ENABLE_FLOW_ENABLE  0x40
+#define USART_U0UCR_FLOW_DISABLE        0x00
+#define USART_U0UCR_FLOW_ENABLE         0x40
 #define USART_U0UCR_D9_ODD              0x00
 #define USART_U0UCR_D9_EVEN             0x20
 #define USART_U0UCR_BIT9_DISABLE        0x00
@@ -65,6 +65,7 @@ typedef uint8_t USART_BufferIndex;
 /*******************| Global variables |*******************************/
 
 /*******************| Function prototypes |****************************/
+void UART_init();
 void USART_setBaudrate(USART_Baudrate_t baudrate);
 void USART_setParity(USART_Parity_t parity);
 

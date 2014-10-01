@@ -11,6 +11,13 @@
 #error Board frequemcy must be set to 32MHz for UART to work properly
 #endif
 
+#ifndef USART_SIZE_OF_USART_TX_BUFFER
+#error USART_SIZE_OF_USART_TX_BUFFER must be defined in USART_cfg.h
+#endif
+
+#ifndef USART_SIZE_OF_USART_RX_BUFFER
+#error USART_SIZE_OF_USART_RX_BUFFER must be defined in USART_cfg.h
+#endif
 
 /*******************| Type definitions |*******************************/
 
@@ -22,6 +29,15 @@ static USART_BufferIndex USART_RxBufferIndex = 0;
 
 /*******************| Function definition |****************************/
 
+void UART_init()
+{
+  /* Configure UART0 for Alternative 1 => Port P0 (PERCFG.U0CFG = 0) */
+  PERCFG &= ~0x01;
+  /* Configure relevant Port P0 pins for peripheral function:
+   * P0SEL.SELP0_2/3/4/5 = 1 => RX = P0_2, TX = P0_3, CT = P0_4, RT = P0_5 */
+  P0SEL |= 0x3C;
+}
+
 /**
  * Baudrate set for USART module
  * @param: baudrate. Baudrate to be used for USART module. See swru191c.pdf 
@@ -32,6 +48,8 @@ static USART_BufferIndex USART_RxBufferIndex = 0;
 */
 void USART_setBaudrate(USART_Baudrate_t baudrate)
 {
+  /* Disable module while configuring it */
+  U0CSR &= ~USART_U0CSR_RE_ENABLED;
   /* baudrate register values are taken from swru191c.pdf Table 17-1. Commonly 
    * Used Baud-Rate Settings for 32 MHz System Clock */
   switch (baudrate)
@@ -68,12 +86,10 @@ void USART_setBaudrate(USART_Baudrate_t baudrate)
       U0BAUD = 59;
       U0GCR = 8 & REGISTER_MASK_UxGCR_BAUD_E; 
   }
-  /* Set U0CSR register to USART, receive enable */
-  U0CSR = 0x00 | USART_U0CSR_MODE_UART | USART_U0CSR_RE_ENABLED;
-  /* flush USART module */
-  /* set transmission mode to default 8 bit + one stop bit, low level at start and stop, flush USART module 
-   * USART_U0UCR_PARITY_DISABLE/USART_U0UCR_PARITY_ENABLE, USART_U0UCR_D9_ODD/USART_U0UCR_D9_EVEN will be set in USART_setParity */
-  U0UCR |= USART_U0UCR_FLUSH | USART_U0UCR_BIT9_DISABLE | USART_U0UCR_SPB_1BIT | USART_U0UCR_STOP_LOW | USART_U0UCR_START_LOW;
+  /* Set U0CSR register to USART, receive enable and flush it*/
+  /* If parity was not yet conifigured this sets transmission mode to default 
+   * 8N1: 8 bit + one stop bit, low level at start, high on stop */
+  U0CSR |= USART_U0UCR_FLUSH | USART_U0CSR_MODE_UART | USART_U0CSR_RE_ENABLED;
 }
 
 /**
@@ -84,17 +100,21 @@ void USART_setBaudrate(USART_Baudrate_t baudrate)
  */
 void USART_setParity(USART_Parity_t parity)
 {
+  /* Disable module while configuring it */
+  U0CSR &= ~USART_U0CSR_RE_ENABLED;
   switch (parity)
   {
   case USART_Parity_8BitEvenParity:
-    U0UCR |= USART_U0UCR_FLUSH | USART_U0UCR_PARITY_ENABLE | USART_U0UCR_D9_EVEN;
+    U0UCR = USART_U0UCR_FLOW_ENABLE | USART_U0UCR_PARITY_ENABLE | USART_U0UCR_D9_EVEN | USART_U0UCR_BIT9_ENABLE | USART_U0UCR_SPB_1BIT | USART_U0UCR_START_LOW | USART_U0UCR_STOP_HIGH;
     break;
   case USART_Parity_8BitOddParity:
-    U0UCR |= USART_U0UCR_FLUSH | USART_U0UCR_PARITY_ENABLE | USART_U0UCR_D9_ODD;
+    U0UCR = USART_U0UCR_FLOW_ENABLE | USART_U0UCR_PARITY_ENABLE | USART_U0UCR_D9_ODD | USART_U0UCR_BIT9_ENABLE | USART_U0UCR_SPB_1BIT | USART_U0UCR_START_LOW | USART_U0UCR_STOP_HIGH;
     break;
   default:
-    U0UCR |= USART_U0UCR_FLUSH | USART_U0UCR_PARITY_DISABLE | USART_U0UCR_D9_EVEN;
+    U0UCR = USART_U0UCR_FLOW_ENABLE | USART_U0UCR_PARITY_DISABLE | USART_U0UCR_D9_ODD | USART_U0UCR_BIT9_DISABLE | USART_U0UCR_SPB_1BIT | USART_U0UCR_START_LOW | USART_U0UCR_STOP_HIGH;
   }
+  /* enable modul again and flush it */
+  U0CSR |= USART_U0CSR_MODE_UART | USART_U0CSR_RE_ENABLED;
 }
 
 /* maximum of buffer_size can be sent, not more */
