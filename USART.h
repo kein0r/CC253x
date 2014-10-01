@@ -5,6 +5,7 @@
 #define USART_H_
    
 /*******************| Inclusions |*************************************/
+#include <USART_cfg.h>
 #include <PlatformTypes.h>
    
 /*******************| Macros |*****************************************/
@@ -13,7 +14,12 @@
 #define USART_BAUDRATE_DEFAULT  USART_Baudrate_9600
 #define USART_PARITY_DEFAULT  USART_Parity_8BitNoParity
    
-#define REGISTER_MASK_UxGCR_BAUD_E      0x1f
+#define USART_U0CSR_MODE_SPI            0x00
+#define USART_U0CSR_MODE_UART           0x80
+#define USART_U0CSR_RE_ENABLED          0x00
+#define USART_U0CSR_RE_DISABLED         0x40
+#define USART_U0CSR_SLAVE_SPI_MASTER    0x00
+#define USART_U0CSR_SLAVE_SPI_SLAVE     0x20
    
 #define USART_U0UCR_FLUSH               0x80
 #define USART_U0UCR_ENABLE_FLOW_DISABLE 0x40
@@ -31,6 +37,7 @@
 #define USART_U0UCR_START_LOW           0x00
 #define USART_U0UCR_START_HIGH          0x01
 
+#define REGISTER_MASK_UxGCR_BAUD_E      0x1f
 #define USART_flush()                   U0UCR |= USART_U0UCR_FLUSH
 
 /*******************| Type definitions |*******************************/

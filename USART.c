@@ -24,6 +24,7 @@
  * Chapter 17.4 Baud-Rate Generation for a list of valid baudrate. Invalid 
  * baudrates settings will be ignored and default baudrate of 9600 will be
  * used instead.
+ * SPI config in U0CGR will be reset to 0.
 */
 void USART_setBaudrate(USART_Baudrate_t baudrate)
 {
@@ -64,7 +65,7 @@ void USART_setBaudrate(USART_Baudrate_t baudrate)
       U0GCR = 8 & REGISTER_MASK_UxGCR_BAUD_E; 
   }
   /* Set U0CSR register to USART, receive enable */
-  U0CSR = 0x00;
+  U0CSR = 0x00 | USART_U0CSR_MODE_UART | USART_U0CSR_RE_ENABLED;
   /* flush USART module */
   /* set transmission mode to default 8 bit + one stop bit, low level at start and stop, flush USART module 
    * USART_U0UCR_PARITY_DISABLE/USART_U0UCR_PARITY_ENABLE, USART_U0UCR_D9_ODD/USART_U0UCR_D9_EVEN will be set in USART_setParity */
