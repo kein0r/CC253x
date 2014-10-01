@@ -15,6 +15,10 @@
 /*******************| Type definitions |*******************************/
 
 /*******************| Global variables |*******************************/
+static USART_Buffer USART_TxBuffer[USART_SIZE_OF_USART_TX_BUFFER];
+static USART_BufferIndex USART_TxBufferIndex = 0;
+static USART_Buffer USART_RxBuffer[USART_SIZE_OF_USART_RX_BUFFER];
+static USART_BufferIndex USART_RxBufferIndex = 0;
 
 /*******************| Function definition |****************************/
 
@@ -91,5 +95,12 @@ void USART_setParity(USART_Parity_t parity)
   default:
     U0UCR |= USART_U0UCR_FLUSH | USART_U0UCR_PARITY_DISABLE | USART_U0UCR_D9_EVEN;
   }
+}
+
+/* maximum of buffer_size can be sent, not more */
+
+void USART_send(uint8_t dataPointer, uint8_t size)
+{
+  if (USART_TxBufferIndex == 0);
 }
 /** @}*/

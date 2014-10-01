@@ -58,6 +58,10 @@ typedef enum {
   USART_Parity_8BitOddParity
 } USART_Parity_t;
 
+typedef uint8_t USART_Buffer;
+typedef USART_Buffer *USART_BufferPtr;
+typedef uint8_t USART_BufferIndex;
+
 /*******************| Global variables |*******************************/
 
 /*******************| Function prototypes |****************************/
