@@ -23,9 +23,11 @@
 
 /*******************| Global variables |*******************************/
 static USART_Buffer USART_TxBuffer[USART_SIZE_OF_USART_TX_BUFFER];
-static USART_BufferIndex USART_TxBufferIndex = 0;
+static USART_BufferIndex USART_TxWriteBufferIndex = 0;
+static USART_BufferIndex USART_TxReadBufferIndex = 0;
 static USART_Buffer USART_RxBuffer[USART_SIZE_OF_USART_RX_BUFFER];
-static USART_BufferIndex USART_RxBufferIndex = 0;
+static USART_BufferIndex USART_RxWriteBufferIndex = 0;
+static USART_BufferIndex USART_RxReadBufferIndex = 0;
 
 /*******************| Function definition |****************************/
 
@@ -36,6 +38,10 @@ void UART_init()
   /* Configure relevant Port P0 pins for peripheral function:
    * P0SEL.SELP0_2/3/4/5 = 1 => RX = P0_2, TX = P0_3, CT = P0_4, RT = P0_5 */
   P0SEL |= 0x3C;
+  
+  /* enable Rx and Tx interrupt */
+  //enableInterrupt(IEN0, IEN0_URX0IE);
+  enableInterrupt(IEN2, IEN2_UTX0IE);
 }
 
 /**
@@ -117,10 +123,34 @@ void USART_setParity(USART_Parity_t parity)
   U0CSR |= USART_U0CSR_MODE_UART | USART_U0CSR_RE_ENABLED;
 }
 
+uint8_t USART_available()
+{
+  return (USART_RxReadBufferIndex != USART_RxWriteBufferIndex);
+}
+
 /* maximum of buffer_size can be sent, not more */
 
-void USART_send(uint8_t dataPointer, uint8_t size)
+void USART_write(char const *dataPointer)
 {
-  if (USART_TxBufferIndex == 0);
+  while (*dataPointer)
+  {
+    USART_TxBuffer[USART_incrementTxIndex(USART_TxWriteBufferIndex)] = *dataPointer;
+    dataPointer++;
+  }
+  /* Tell uart that there is something to be sent (if not alread on it) */
+  UTX0IF = 1;
+}
+
+/**
+ * ISR for radio Rx interrupt
+*/
+#pragma vector = UTX0_VECTOR
+__near_func __interrupt void USART_TxComplete(void)
+{
+  UTX0IF = 0;
+  if (USART_TxReadBufferIndex != USART_TxWriteBufferIndex)
+  {
+    U0DBUF = USART_TxBuffer[USART_incrementTxIndex(USART_TxReadBufferIndex)];
+  }
 }
 /** @}*/

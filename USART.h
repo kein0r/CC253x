@@ -13,6 +13,12 @@
  * will always be 9600 baud. Equally of the value set here */
 #define USART_BAUDRATE_DEFAULT  USART_Baudrate_9600
 #define USART_PARITY_DEFAULT  USART_Parity_8BitNoParity
+
+/**
+ * interrupt flag bits 
+*/
+#define IEN0_URX0IE                             0x04
+#define IEN2_UTX0IE                             0x04
    
 #define USART_U0CSR_MODE_SPI            0x00
 #define USART_U0CSR_MODE_UART           0x80
@@ -39,6 +45,9 @@
 
 #define REGISTER_MASK_UxGCR_BAUD_E      0x1f
 #define USART_flush()                   U0UCR |= USART_U0UCR_FLUSH
+   
+#define USART_incrementTxIndex(a)       (USART_BufferIndex)(++a % USART_SIZE_OF_USART_TX_BUFFER)
+#define USART_incrementRxIndex(a)       (USART_BufferIndex)(++a % USART_SIZE_OF_USART_RX_BUFFER)
 
 /*******************| Type definitions |*******************************/
 typedef enum {
@@ -68,6 +77,7 @@ typedef uint8_t USART_BufferIndex;
 void UART_init();
 void USART_setBaudrate(USART_Baudrate_t baudrate);
 void USART_setParity(USART_Parity_t parity);
-
+uint8_t USART_available();
+void USART_write(char const *dataPointer);
 #endif
 /** @}*/
