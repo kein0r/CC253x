@@ -46,8 +46,7 @@
 #define REGISTER_MASK_UxGCR_BAUD_E      0x1f
 #define USART_flush()                   U0UCR |= USART_U0UCR_FLUSH
    
-#define USART_incrementTxIndex(a)       (USART_BufferIndex)(++a % USART_SIZE_OF_USART_TX_BUFFER)
-#define USART_incrementRxIndex(a)       (USART_BufferIndex)(++a % USART_SIZE_OF_USART_RX_BUFFER)
+#define USART_incrementIndex(a)         a = (a + 1) % USART_RING_BUFFER_SIZE
 
 /*******************| Type definitions |*******************************/
 typedef enum {
@@ -67,9 +66,12 @@ typedef enum {
   USART_Parity_8BitOddParity
 } USART_Parity_t;
 
-typedef uint8_t USART_Buffer;
-typedef USART_Buffer *USART_BufferPtr;
-typedef uint8_t USART_BufferIndex;
+typedef struct
+{
+  unsigned char buffer[USART_RING_BUFFER_SIZE];
+  volatile uint8_t head;
+  volatile uint8_t tail;
+} USART_RingBuffer_t;
 
 /*******************| Global variables |*******************************/
 
@@ -79,5 +81,7 @@ void USART_setBaudrate(USART_Baudrate_t baudrate);
 void USART_setParity(USART_Parity_t parity);
 uint8_t USART_available();
 void USART_write(char const *dataPointer);
+void USART_read(char *dataPointer);
+void USART_getc(char *dataPointer);
 #endif
 /** @}*/

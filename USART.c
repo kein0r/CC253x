@@ -1,6 +1,29 @@
 /** @ingroup USART
  * @{
  */
+
+/*
+  USART.c - Hardware serial for CC2530
+  Copyright (c) 2014 Jan Rüdiger.  All right reserved.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+  Credits:
+  Parts of this code are inspired by Arduino hardware serial library.
+*/
+
 #include <USART.h>
 #include <board.h>
 
@@ -11,23 +34,15 @@
 #error Board frequemcy must be set to 32MHz for UART to work properly
 #endif
 
-#ifndef USART_SIZE_OF_USART_TX_BUFFER
-#error USART_SIZE_OF_USART_TX_BUFFER must be defined in USART_cfg.h
-#endif
-
-#ifndef USART_SIZE_OF_USART_RX_BUFFER
-#error USART_SIZE_OF_USART_RX_BUFFER must be defined in USART_cfg.h
+#ifndef USART_RING_BUFFER_SIZE
+#error USART_RING_BUFFER_SIZE must be defined in USART_cfg.h
 #endif
 
 /*******************| Type definitions |*******************************/
 
 /*******************| Global variables |*******************************/
-static USART_Buffer USART_TxBuffer[USART_SIZE_OF_USART_TX_BUFFER];
-static USART_BufferIndex USART_TxWriteBufferIndex = 0;
-static USART_BufferIndex USART_TxReadBufferIndex = 0;
-static USART_Buffer USART_RxBuffer[USART_SIZE_OF_USART_RX_BUFFER];
-static USART_BufferIndex USART_RxWriteBufferIndex = 0;
-static USART_BufferIndex USART_RxReadBufferIndex = 0;
+static USART_RingBuffer_t USART_TxRingBuffer = { { 0 }, 0, 0};
+static USART_RingBuffer_t USART_RxRingBuffer = { { 0 }, 0, 0};
 
 /*******************| Function definition |****************************/
 
@@ -40,8 +55,8 @@ void UART_init()
   P0SEL |= 0x3C;
   
   /* enable Rx and Tx interrupt */
-  //enableInterrupt(IEN0, IEN0_URX0IE);
   enableInterrupt(IEN2, IEN2_UTX0IE);
+  enableInterrupt(IEN0, IEN0_URX0IE);
 }
 
 /**
@@ -125,32 +140,83 @@ void USART_setParity(USART_Parity_t parity)
 
 uint8_t USART_available()
 {
-  return (USART_RxReadBufferIndex != USART_RxWriteBufferIndex);
+  return (USART_TxRingBuffer.head != USART_TxRingBuffer.tail);
 }
 
-/* maximum of buffer_size can be sent, not more */
-
+/* Adds string in dataPointer to Tx ringbuffer and activated TXIF to transmit
+ * data.
+ * @param: dataPointer: Zero-terminated string.
+ */
 void USART_write(char const *dataPointer)
 {
   while (*dataPointer)
   {
-    USART_TxBuffer[USART_incrementTxIndex(USART_TxWriteBufferIndex)] = *dataPointer;
+    USART_incrementIndex(USART_TxRingBuffer.head);
+    USART_TxRingBuffer.buffer[USART_TxRingBuffer.head] = *dataPointer;
     dataPointer++;
   }
   /* Tell uart that there is something to be sent (if not alread on it) */
   UTX0IF = 1;
 }
 
+/* reads from USART Rx ringbuffer until either string delimiter (0) is found.
+ * This function is blocking! It will only return if a zero terminated string
+ * is found.
+ * @param: dataPointer: Zero-terminated string read from USAT
+ */
+void USART_read(char *dataPointer)
+{
+  while (*dataPointer)
+  {
+    /* check if data is available */
+    if (USART_RxRingBuffer.head != USART_RxRingBuffer.tail)
+    {
+      USART_incrementIndex(USART_RxRingBuffer.tail);
+      *dataPointer = USART_RxRingBuffer.buffer[USART_RxRingBuffer.head];
+      dataPointer++;
+    }
+    else 
+    {
+      /* we just wait until enough data is received */
+    }
+  }
+}
+
+/* Reads one byte from USART Rx ringbuffer if available
+ * This function is blocking! It will only return at least one byte was received
+ * @param: dataPointer: pinter were to put that byte
+ */
+void USART_getc(char *dataPointer)
+{
+  /* if no data available yet, wait! */
+  while(USART_RxRingBuffer.head == USART_RxRingBuffer.tail) ;
+  USART_incrementIndex(USART_RxRingBuffer.tail);
+  *dataPointer = USART_RxRingBuffer.buffer[USART_RxRingBuffer.head];
+}
+
 /**
- * ISR for radio Rx interrupt
+ * USART Tx-finished ISR
 */
 #pragma vector = UTX0_VECTOR
 __near_func __interrupt void USART_TxComplete(void)
 {
   UTX0IF = 0;
-  if (USART_TxReadBufferIndex != USART_TxWriteBufferIndex)
+  if (USART_TxRingBuffer.tail != USART_TxRingBuffer.head)
   {
-    U0DBUF = USART_TxBuffer[USART_incrementTxIndex(USART_TxReadBufferIndex)];
+    USART_incrementIndex(USART_TxRingBuffer.tail);
+    U0DBUF = USART_TxRingBuffer.buffer[USART_TxRingBuffer.tail];
   }
 }
+
+/**
+ * USART Rx data received ISR. No check is done for buffre overflow!
+*/
+#pragma vector = URX0_VECTOR
+__near_func __interrupt void USART_RxComplete(void)
+{
+  URX0IF = 0;
+  USART_incrementIndex(USART_RxRingBuffer.head);
+  USART_RxRingBuffer.buffer[USART_RxRingBuffer.head] = U0DBUF;
+}
+
 /** @}*/
