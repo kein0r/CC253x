@@ -81,7 +81,7 @@ void USART_setBaudrate(USART_Baudrate_t baudrate);
 void USART_setParity(USART_Parity_t parity);
 uint8_t USART_available();
 void USART_write(char const *dataPointer);
-void USART_read(char *dataPointer);
+void USART_read(char *dataPointer, uint16_t numBytes);
 void USART_getc(char *dataPointer);
 #endif
 /** @}*/

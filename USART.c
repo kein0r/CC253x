@@ -159,14 +159,15 @@ void USART_write(char const *dataPointer)
   UTX0IF = 1;
 }
 
-/* reads from USART Rx ringbuffer until either string delimiter (0) is found.
+/* reads from USART Rx ringbuffer until either numBytes are read or string 
+ * delimiter (0) is found.
  * This function is blocking! It will only return if a zero terminated string
  * is found.
  * @param: dataPointer: Zero-terminated string read from USAT
  */
-void USART_read(char *dataPointer)
+void USART_read(char *dataPointer, uint16_t numBytes)
 {
-  while (*dataPointer)
+  while (*dataPointer && numBytes)
   {
     /* check if data is available */
     if (USART_RxRingBuffer.head != USART_RxRingBuffer.tail)
@@ -174,6 +175,7 @@ void USART_read(char *dataPointer)
       USART_incrementIndex(USART_RxRingBuffer.tail);
       *dataPointer = USART_RxRingBuffer.buffer[USART_RxRingBuffer.head];
       dataPointer++;
+      numBytes--;
     }
     else 
     {
