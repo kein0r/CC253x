@@ -140,7 +140,7 @@ void USART_setParity(USART_Parity_t parity)
 
 uint8_t USART_available()
 {
-  return (USART_TxRingBuffer.head != USART_TxRingBuffer.tail);
+  return (unit8_t) (USART_TxRingBuffer.head - USART_TxRingBuffer.tail);
 }
 
 /* Adds string in dataPointer to Tx ringbuffer and activated TXIF to transmit
