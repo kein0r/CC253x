@@ -17,8 +17,8 @@
 /**
  * interrupt flag bits 
 */
-#define IEN0_URX0IE                             0x04
-#define IEN2_UTX0IE                             0x04
+#define IEN0_URX0IE                     0x04
+#define IEN2_UTX0IE                     0x04
    
 #define USART_U0CSR_MODE_SPI            0x00
 #define USART_U0CSR_MODE_UART           0x80
@@ -81,7 +81,7 @@ void USART_setBaudrate(USART_Baudrate_t baudrate);
 void USART_setParity(USART_Parity_t parity);
 uint8_t USART_available();
 void USART_write(char const *dataPointer);
-void USART_read(char *dataPointer, uint16_t numBytes);
+uint8_t USART_read(char *dataPointer, uint8_t numBytes);
 void USART_getc(char *dataPointer);
 #endif
 /** @}*/

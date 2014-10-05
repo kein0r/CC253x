@@ -164,10 +164,12 @@ void USART_write(char const *dataPointer)
  * This function is blocking! It will only return if a zero terminated string
  * is found.
  * @param: dataPointer: Zero-terminated string read from USAT
+ * @return: Number of bytes actually read
  */
-void USART_read(char *dataPointer, uint16_t numBytes)
+uint8_t USART_read(char *dataPointer, uint8_t numBytes)
 {
-  while (*dataPointer && numBytes)
+  uint8_t bytesRead = 0;
+  while ((*dataPointer) && numBytes)
   {
     /* check if data is available */
     if (USART_RxRingBuffer.head != USART_RxRingBuffer.tail)
@@ -176,12 +178,14 @@ void USART_read(char *dataPointer, uint16_t numBytes)
       *dataPointer = USART_RxRingBuffer.buffer[USART_RxRingBuffer.head];
       dataPointer++;
       numBytes--;
+      bytesRead++;
     }
     else 
     {
       /* we just wait until enough data is received */
     }
   }
+  return bytesRead;
 }
 
 /* Reads one byte from USART Rx ringbuffer if available
