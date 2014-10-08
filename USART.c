@@ -1,7 +1,6 @@
 /** @ingroup USART
  * @{
  */
-
 /*
   USART.c - Hardware serial for CC2530
   Copyright (c) 2014 Jan Rüdiger.  All right reserved.
@@ -35,7 +34,7 @@
 #endif
 
 #ifndef USART_RING_BUFFER_SIZE
-#error USART_RING_BUFFER_SIZE must be defined in USART_cfg.h
+#error USART_RING_BUFFER_SIZE must be defined in Config.h
 #endif
 
 /*******************| Type definitions |*******************************/

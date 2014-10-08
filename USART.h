@@ -5,7 +5,7 @@
 #define USART_H_
    
 /*******************| Inclusions |*************************************/
-#include <USART_cfg.h>
+#include <Config.h>
 #include <PlatformTypes.h>
    
 /*******************| Macros |*****************************************/
