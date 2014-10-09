@@ -25,6 +25,9 @@
 
 #include <USART.h>
 #include <board.h>
+#ifdef TIMER2_TIMER2_IN_USE
+#include <Timer2.h>      
+#endif
 
 /*******************| Inclusions |*************************************/
 
@@ -168,6 +171,9 @@ void USART_write(char const *dataPointer)
 uint8_t USART_read(char *dataPointer, uint8_t numBytes)
 {
   uint8_t bytesRead = 0;
+ #ifdef TIMER2_TIMER2_IN_USE
+  Timer2_t lastRead, currentTimer;     
+ #endif
   while ((*dataPointer) && numBytes)
   {
     /* check if data is available */
@@ -178,10 +184,17 @@ uint8_t USART_read(char *dataPointer, uint8_t numBytes)
       dataPointer++;
       numBytes--;
       bytesRead++;
+#ifdef TIMER2_TIMER2_IN_USE
+      Timer2_read(&lastRead);
+#endif
     }
     else 
     {
       /* we just wait until enough data is received */
+#ifdef TIMER2_TIMER2_IN_USE
+      Timer2_read(&currentTime);
+      if (
+#endif
     }
   }
   return bytesRead;

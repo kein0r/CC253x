@@ -38,6 +38,9 @@ void CC253x_ActivatePowerMode(uint8_t mode)
   /* activate mode */
   /* TODO: Align following code on 2-byte boundary */
   PCON = PCON_IDLE_ENTERSLEEPMODE;
+#ifdef TIMER2_TIMER2_IN_USE
+#warning Timer2 code must be added her
+#endif
   nop();
   /* wait until clock is back up as configured. Especially if external 32MHz 
    * oscilator is used together with wireless. */
