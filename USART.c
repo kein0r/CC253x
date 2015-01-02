@@ -67,7 +67,7 @@ void UART_init()
  * Chapter 17.4 Baud-Rate Generation for a list of valid baudrate. Invalid 
  * baudrates settings will be ignored and default baudrate of 9600 will be
  * used instead.
- * SPI config in U0CGR will be reset to 0.
+ * @note: SPI config in U0CGR will be reset to 0.
 */
 void USART_setBaudrate(USART_Baudrate_t baudrate)
 {
