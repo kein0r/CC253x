@@ -26,6 +26,9 @@
 #define USART_U0CSR_RE_DISABLED         0x00
 #define USART_U0CSR_SLAVE_SPI_MASTER    0x00
 #define USART_U0CSR_SLAVE_SPI_SLAVE     0x20
+#define USART_U0CSR_RX_BYTE             0x04
+#define USART_U0CSR_TX_BYTE             0x02
+#define USART_U0CSR_ACTIVE              0x01
    
 #define USART_U0UCR_FLUSH               0x80
 #define USART_U0UCR_FLOW_DISABLE        0x00
@@ -45,7 +48,7 @@
 
 #define REGISTER_MASK_UxGCR_BAUD_E      0x1f
 #define USART_flush()                   U0UCR |= USART_U0UCR_FLUSH
-   
+
 #define USART_incrementIndex(a)         a = (a + 1) % USART_RING_BUFFER_SIZE
 
 /*******************| Type definitions |*******************************/
@@ -66,11 +69,17 @@ typedef enum {
   USART_Parity_8BitOddParity
 } USART_Parity_t;
 
+typedef uint8_t USART_BufferIndex_t;
+
+/**
+ * Data for ring buffer.
+ * Index pointer for head and tail will always point to element which is next to be read/written.
+ */
 typedef struct
 {
-  unsigned char buffer[USART_RING_BUFFER_SIZE];
-  volatile uint8_t head;
-  volatile uint8_t tail;
+  unsigned char buffer[USART_RING_BUFFER_SIZE]; /*!< Content of ring buffer */
+  volatile USART_BufferIndex_t head;        /*!< Index for writing to the ring buffer. Index is increased after writing (i.e. producing) an element */
+  volatile USART_BufferIndex_t tail;        /*!< Index for reading from ring buffer. Index is increased after reading (i.e consuming) an element. */
 } USART_RingBuffer_t;
 
 /*******************| Global variables |*******************************/
@@ -80,8 +89,9 @@ void UART_init();
 void USART_setBaudrate(USART_Baudrate_t baudrate);
 void USART_setParity(USART_Parity_t parity);
 uint8_t USART_available();
-void USART_write(char const *dataPointer);
 uint8_t USART_read(char *dataPointer, uint8_t numBytes);
+void USART_writeline(char const *dataPointer);
 void USART_getc(char *dataPointer);
+void USART_putc(const char data);
 #endif
 /** @}*/

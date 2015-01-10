@@ -140,31 +140,9 @@ void USART_setParity(USART_Parity_t parity)
   U0CSR |= USART_U0CSR_MODE_UART | USART_U0CSR_RE_ENABLED;
 }
 
-uint8_t USART_available()
-{
-  return (uint8_t) (USART_TxRingBuffer.head - USART_TxRingBuffer.tail);
-}
-
-/* Adds string in dataPointer to Tx ringbuffer and activated TXIF to transmit
- * data.
- * @param: dataPointer: Zero-terminated string.
- */
-void USART_write(char const *dataPointer)
-{
-  while (*dataPointer)
-  {
-    USART_incrementIndex(USART_TxRingBuffer.head);
-    USART_TxRingBuffer.buffer[USART_TxRingBuffer.head] = *dataPointer;
-    dataPointer++;
-  }
-  /* Tell uart that there is something to be sent (if not alread on it) */
-  UTX0IF = 1;
-}
-
-/* reads from USART Rx ringbuffer until either numBytes are read or string 
- * delimiter (0) is found.
- * This function is blocking! It will only return if a zero terminated string
- * is found.
+/* reads from USART Rx ringbuffer until numBytes are read.
+ * This function is blocking!
+ * @TODO: Implement timeout
  * @param: dataPointer: Zero-terminated string read from USAT
  * @return: Number of bytes actually read
  */
@@ -174,13 +152,12 @@ uint8_t USART_read(char *dataPointer, uint8_t numBytes)
  #ifdef TIMER2_TIMER2_IN_USE
   Timer2_t lastRead, currentTimer;     
  #endif
-  while ((*dataPointer) && numBytes)
+  while (numBytes)
   {
     /* check if data is available */
     if (USART_RxRingBuffer.head != USART_RxRingBuffer.tail)
     {
-      USART_incrementIndex(USART_RxRingBuffer.tail);
-      *dataPointer = USART_RxRingBuffer.buffer[USART_RxRingBuffer.head];
+      USART_getc(dataPointer);
       dataPointer++;
       numBytes--;
       bytesRead++;
@@ -199,17 +176,59 @@ uint8_t USART_read(char *dataPointer, uint8_t numBytes)
   }
   return bytesRead;
 }
-
-/* Reads one byte from USART Rx ringbuffer if available
- * This function is blocking! It will only return at least one byte was received
- * @param: dataPointer: pinter were to put that byte
+  
+/* Adds string in dataPointer to Tx ringbuffer and activated TXIF to transmit
+ * data.
+ * @param: dataPointer: Zero-terminated string.
  */
-void USART_getc(char *dataPointer)
+void USART_writeline(char const *dataPointer)
+{
+  while (*dataPointer)
+  {
+    USART_putc(*dataPointer);
+    dataPointer++;
+  }
+  USART_putc(0x00);
+}
+
+/**
+ * Reads one byte from USART Rx ringbuffer if available
+ * This function is blocking! It will only return at least one byte was received
+ * @param: dataPointer: pointer were to put that byte
+ */
+inline void USART_getc(char *dataPointer)
 {
   /* if no data available yet, wait! */
   while(USART_RxRingBuffer.head == USART_RxRingBuffer.tail) ;
+  *dataPointer = USART_RxRingBuffer.buffer[USART_RxRingBuffer.tail];
   USART_incrementIndex(USART_RxRingBuffer.tail);
-  *dataPointer = USART_RxRingBuffer.buffer[USART_RxRingBuffer.head];
+}
+  
+/**
+ * Write one byte from tx ringbuffer to USART if available
+ * This function is blocking! If head would move to the same location as the
+ * tail the buffer would overflow.
+ * After successful copy the Tx ISR is triggered.
+ * @param: dataPointer: pinter were to put that byte
+ */
+inline void USART_putc(const char data)
+{
+  /* In case buffer is empty (i.e. first byte to write), copy data directly to USART register */
+  if (USART_TxRingBuffer.head == USART_TxRingBuffer.tail)
+  {
+    U0DBUF = data;
+  }
+  /* if not empty use buffer */
+  else {
+    /* Actually index should be incremented after write to buffer. However,
+     * we do it now in temp to check for possible buffer overflow */
+    USART_BufferIndex_t temp = USART_TxRingBuffer.head;
+    USART_incrementIndex(temp);
+    /* wait until enough space available in buffer */
+    while(temp == USART_TxRingBuffer.tail) ;
+    USART_TxRingBuffer.buffer[USART_TxRingBuffer.head] = data;
+    USART_TxRingBuffer.head = temp;
+  }
 }
 
 /**
@@ -218,23 +237,26 @@ void USART_getc(char *dataPointer)
 #pragma vector = UTX0_VECTOR
 __near_func __interrupt void USART_TxComplete(void)
 {
+  if (U0CSR & USART_U0CSR_ACTIVE) return;
   UTX0IF = 0;
-  if (USART_TxRingBuffer.tail != USART_TxRingBuffer.head)
+  /* Process next byte in queue if there is one */
+  if (USART_TxRingBuffer.head != USART_TxRingBuffer.tail)
   {
-    USART_incrementIndex(USART_TxRingBuffer.tail);
     U0DBUF = USART_TxRingBuffer.buffer[USART_TxRingBuffer.tail];
+    USART_incrementIndex(USART_TxRingBuffer.tail);
   }
 }
 
 /**
- * USART Rx data received ISR. No check is done for buffre overflow!
+ * USART Rx data received ISR. 
+ * @note: No check is done for buffer overflow!
 */
 #pragma vector = URX0_VECTOR
 __near_func __interrupt void USART_RxComplete(void)
 {
   URX0IF = 0;
-  USART_incrementIndex(USART_RxRingBuffer.head);
   USART_RxRingBuffer.buffer[USART_RxRingBuffer.head] = U0DBUF;
+  USART_incrementIndex(USART_RxRingBuffer.head);
 }
 
 /** @}*/
