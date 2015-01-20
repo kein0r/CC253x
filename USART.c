@@ -177,7 +177,23 @@ uint8_t USART_read(char *dataPointer, uint8_t numBytes)
   return bytesRead;
 }
   
-/* Adds string in dataPointer to Tx ringbuffer and activated TXIF to transmit
+/**
+ * Adds numbBytes from dataPointer to Tx ringbuffer and activates transmit
+ * @param: dataPointer: data to be sent
+ * @parma: numBytes: number of bytes to be sent
+ */
+void USART_write(char const *dataPointer, uint8_t numBytes)
+{
+  while (numBytes)
+  {
+    USART_putc(*dataPointer);
+    dataPointer++;
+    numBytes--;
+  }
+}
+  
+/**
+ * Adds string in dataPointer to Tx ringbuffer and activates transmit
  * data.
  * @param: dataPointer: Zero-terminated string.
  */
@@ -237,14 +253,13 @@ inline void USART_putc(const char data)
 #pragma vector = UTX0_VECTOR
 __near_func __interrupt void USART_TxComplete(void)
 {
-  if (U0CSR & USART_U0CSR_ACTIVE) return;
-  UTX0IF = 0;
   /* Process next byte in queue if there is one */
   if (USART_TxRingBuffer.head != USART_TxRingBuffer.tail)
   {
     U0DBUF = USART_TxRingBuffer.buffer[USART_TxRingBuffer.tail];
     USART_incrementIndex(USART_TxRingBuffer.tail);
   }
+  UTX0IF = 0;
 }
 
 /**
@@ -254,9 +269,9 @@ __near_func __interrupt void USART_TxComplete(void)
 #pragma vector = URX0_VECTOR
 __near_func __interrupt void USART_RxComplete(void)
 {
-  URX0IF = 0;
   USART_RxRingBuffer.buffer[USART_RxRingBuffer.head] = U0DBUF;
   USART_incrementIndex(USART_RxRingBuffer.head);
+  URX0IF = 0;
 }
 
 /** @}*/
