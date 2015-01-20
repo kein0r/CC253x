@@ -52,7 +52,9 @@
 #define SleepTimerInterruptClearFlag()                  STIF = 0x0
 
 #define SWAP_UINT16(x) ( ((x) << 8) | ((x) >> 8) )
-   
+#define SWAP_UINT32(x)
+#define SWAP_UINT64(x)
+
 /*******************| Type definitions |*******************************/
 typedef union {
   uint32_t value;
