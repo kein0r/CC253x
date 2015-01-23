@@ -232,6 +232,8 @@ inline void USART_putc(const char data)
   /* In case buffer is empty (i.e. first byte to write), copy data directly to USART register */
   if (USART_TxRingBuffer.head == USART_TxRingBuffer.tail)
   {
+    /* need to increment first as the interrupt will happen directly after writing the register */
+    USART_incrementIndex(USART_TxRingBuffer.head);
     U0DBUF = data;
   }
   /* if not empty use buffer */
@@ -256,8 +258,8 @@ __near_func __interrupt void USART_TxComplete(void)
   /* Process next byte in queue if there is one */
   if (USART_TxRingBuffer.head != USART_TxRingBuffer.tail)
   {
-    U0DBUF = USART_TxRingBuffer.buffer[USART_TxRingBuffer.tail];
     USART_incrementIndex(USART_TxRingBuffer.tail);
+    U0DBUF = USART_TxRingBuffer.buffer[USART_TxRingBuffer.tail];
   }
   UTX0IF = 0;
 }
