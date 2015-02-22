@@ -255,13 +255,13 @@ inline void USART_putc(const char data)
 #pragma vector = UTX0_VECTOR
 __near_func __interrupt void USART_TxComplete(void)
 {
+  UTX0IF = 0;
   USART_incrementIndex(USART_TxRingBuffer.tail);
   /* Process next byte in queue if there is one */
   if (USART_TxRingBuffer.head != USART_TxRingBuffer.tail)
   {
     U0DBUF = USART_TxRingBuffer.buffer[USART_TxRingBuffer.tail];
   }
-  UTX0IF = 0;
 }
 
 /**
