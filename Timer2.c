@@ -19,7 +19,6 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
   Credits:
-  Parts of this code are inspired by Arduino hardware serial library.
 */
 
 /*******************| Inclusions |*************************************/
@@ -36,7 +35,8 @@
 
 /*******************| Function definition |****************************/
 
-/** Initializes and starts timer 2. Timer 2 is always started synchronized
+/** 
+ * Initializes and starts timer 2. Timer 2 is always started synchronized
  * to 32kHz oscilator
  * Also sets overflow if passed value is no equal to 0x0000
 */
@@ -60,6 +60,9 @@ void Timer2_startSynchronous(uint16_t overflowValue)
 
 void Timer2_read(Timer2_t *timerPtr)
 {
+/* Timer 2 contains a 16-bit timer, which increments on each clock cycle. The counter value can be read
+ * from registers T2M1:T2M0 with register T2MSEL.T2MSEL set to 000. Note that the register content in
+ * T2M1 is latched when T2M0 is read, meaning that T2M0 must always be read first. */
   T2MSEL = T2MSEL_T2MSEL_T2TIMER;
   timerPtr->regs.T2M0 = T2M0;
   timerPtr->regs.T2M1 = T2M1;

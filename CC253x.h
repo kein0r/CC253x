@@ -12,7 +12,7 @@
 #define nop()  asm("NOP") 
    
 /**
- * For easier reading of clock settings
+ * For easier setting and reading of clock settings
 */
 #define CLKCONCMD_OSC32K_XOSC                           0x00
 #define CLKCONCMD_OSC32K_RCOSC                          0x80

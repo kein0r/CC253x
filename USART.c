@@ -62,8 +62,8 @@ void UART_init()
 }
 
 /**
- * Baudrate set for USART module
- * @param: baudrate. Baudrate to be used for USART module. See swru191c.pdf 
+ * Function to set baudrate for USART module
+ * @param baudrate Baudrate to be used for USART module. See swru191c.pdf 
  * Chapter 17.4 Baud-Rate Generation for a list of valid baudrate. Invalid 
  * baudrates settings will be ignored and default baudrate of 9600 will be
  * used instead.
@@ -142,9 +142,9 @@ void USART_setParity(USART_Parity_t parity)
 
 /* reads from USART Rx ringbuffer until numBytes are read.
  * This function is blocking!
- * @TODO: Implement timeout
- * @param: dataPointer: Zero-terminated string read from USAT
- * @return: Number of bytes actually read
+ * @todo Implement timeout
+ * @param dataPointer: Zero-terminated string read from USAT
+ * @return Number of bytes actually read
  */
 uint8_t USART_read(char *dataPointer, uint8_t numBytes)
 {
@@ -179,8 +179,8 @@ uint8_t USART_read(char *dataPointer, uint8_t numBytes)
   
 /**
  * Adds numbBytes from dataPointer to Tx ringbuffer and activates transmit
- * @param: dataPointer: data to be sent
- * @parma: numBytes: number of bytes to be sent
+ * @param dataPointer: data to be sent
+ * @param numBytes: number of bytes to be sent
  */
 void USART_write(char const *dataPointer, uint8_t numBytes)
 {
@@ -195,7 +195,7 @@ void USART_write(char const *dataPointer, uint8_t numBytes)
 /**
  * Adds string in dataPointer to Tx ringbuffer and activates transmit
  * data.
- * @param: dataPointer: Zero-terminated string.
+ * @param dataPointer: Zero-terminated string.
  */
 void USART_writeline(char const *dataPointer)
 {
@@ -210,7 +210,7 @@ void USART_writeline(char const *dataPointer)
 /**
  * Reads one byte from USART Rx ringbuffer if available
  * This function is blocking! It will only return at least one byte was received
- * @param: dataPointer: pointer were to put that byte
+ * @param dataPointer: pointer were to put that byte
  */
 inline void USART_getc(char *dataPointer)
 {
@@ -221,11 +221,11 @@ inline void USART_getc(char *dataPointer)
 }
   
 /**
- * Write one byte from tx ringbuffer to USART if available
- * This function is blocking! If head would move to the same location as the
+ * Write one byte from tx ringbuffer to USART if available.
+ * @note This function is blocking! If head would move to the same location as the
  * tail the buffer would overflow.
  * After successful copy the Tx ISR is triggered.
- * @param: dataPointer: pinter were to put that byte
+ * @param data Pointer were to put the byte read
  */
 inline void USART_putc(const char data)
 {

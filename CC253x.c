@@ -1,12 +1,12 @@
 #include "CC253x.h"
 #include <ioCC2530.h>
-/** TODO: Find a way to include correct file depending on processor type in use */
+/** @todo Find a way to include correct file depending on processor type in use */
 
 /**
  * Initializes MCU especially oscilator
- * @param: clkSource select if 16MHz rc oscilator or 32Mhz external crystal is to be used. One of CLKCONCMD_OSC_16MHZ_ or RCOSC CLKCONCMD_OSC_32MHZ_XOSC
-   @param: Timer ticks output setting. Cannot be higher than system clock setting given by OSC bit setting
-   @param: clkSpeed Clock speed. Cannot be higher than system clock setting given by the OSC bit setting. Indicates current system-clock frequency
+ * @param clkCmd value of CLKCONCMD register. Use CLKCONCMD_XX defines to set. For example 
+ * CLKCONCMD_OSC_XOSC | CLKCONCMD_OSC32K_XOSC | CLKCONCMD_TICKSPD_32MHZ | CLKCONCMD_CLKSPD_32MHz
+ * for external 32MHz and 32KHz oscilator, 32MHz counter tick speed, clock speed 32MHz
 **/
 void CC253x_Init( uint8_t clkCmd )
 {
@@ -23,7 +23,7 @@ void CC253x_Init( uint8_t clkCmd )
  * NOTE: If additional wake-up code is to be called interrupts must be disable
  * after PCON access (see swru191c.pdf Chapter 4. Power Modes and Clocks)
  * 
- * TODO: According to swru191c.pdf Chapter 4. Power Modes and Clocks "The 
+ * @todo According to swru191c.pdf Chapter 4. Power Modes and Clocks "The 
  * instruction that sets the PCON.IDLE bit must be aligned in a certain way for 
  * correct operation. The first byte of the assembly instruction immediately 
  * following this instruction must not be placed on a 4-byte boundary. ... 
@@ -36,7 +36,7 @@ void CC253x_ActivatePowerMode(uint8_t mode)
   /* set desired mode */
   SLEEPCMD = mode & SLEEPCMD_MODE_MASK;
   /* activate mode */
-  /* TODO: Align following code on 2-byte boundary */
+  /* @todo Align following code on 2-byte boundary */
   PCON = PCON_IDLE_ENTERSLEEPMODE;
 #ifdef TIMER2_TIMER2_IN_USE
 #warning Timer2 code must be added her

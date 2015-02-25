@@ -72,7 +72,7 @@ typedef enum {
 typedef uint8_t USART_BufferIndex_t;
 
 /**
- * Data for ring buffer.
+ * \brief Data struct for ring buffer.
  * Index pointer for head and tail will always point to element which is next to be read/written.
  */
 typedef struct
