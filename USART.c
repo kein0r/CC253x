@@ -25,9 +25,6 @@
 
 #include <USART.h>
 #include <board.h>
-#ifdef TIMER2_TIMER2_IN_USE
-#include <Timer2.h>      
-#endif
 
 /*******************| Inclusions |*************************************/
 
