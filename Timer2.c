@@ -58,7 +58,11 @@ void Timer2_startSynchronous(uint16_t overflowValue)
   while (!(T2CTRL & T2CTRL_STATE_MASK)); /* Wait for next 32 kHz positive edge when timer 2 is started */
 }
 
-void Timer2_read(Timer2_t *timerPtr)
+/**
+ * Readout for timer2
+ * @param timerPtr Pointer to Timer2_t where the counter value should be copied to
+*/
+inline void Timer2_read(Timer2_t *timerPtr)
 {
 /* Timer 2 contains a 16-bit timer, which increments on each clock cycle. The counter value can be read
  * from registers T2M1:T2M0 with register T2MSEL.T2MSEL set to 000. Note that the register content in

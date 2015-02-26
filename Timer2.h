@@ -43,7 +43,8 @@
 #define T2MSEL_T2MSEL_T2_COMP2          0x04    /* timer compare 2 */
 
 /*******************| Type definitions |*******************************/
-/* Structure to access T2Mx and T2MOVLx register. This will only work if
+/**
+ * Structure to access T2Mx and T2MOVLx register. This will only work if
  * compiler is placing uint8_t on byte boundary. If not something like
  * #pragma pack must be used.
 */
