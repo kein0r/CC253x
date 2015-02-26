@@ -140,10 +140,12 @@ void USART_setParity(USART_Parity_t parity)
   U0CSR |= USART_U0CSR_MODE_UART | USART_U0CSR_RE_ENABLED;
 }
 
-/* reads from USART Rx ringbuffer until numBytes are read.
- * This function is blocking!
- * @todo Implement timeout
+/**
+ * Reads from USART Rx ringbuffer until numBytes are read.
+ * @note This function is blocking thus, one should check number of bytes in buffer 
+ * by using #USART_numBytesInRxBuffer
  * @param dataPointer: Zero-terminated string read from USAT
+ * @param numBytes Number of bytes to be read from buffer
  * @return Number of bytes actually read
  */
 uint8_t USART_read(char *dataPointer, uint8_t numBytes)
@@ -151,6 +153,7 @@ uint8_t USART_read(char *dataPointer, uint8_t numBytes)
   uint8_t bytesRead = 0;
  #ifdef TIMER2_TIMER2_IN_USE
   Timer2_t lastRead, currentTimer;     
+  Timer2_read(&lastRead);
  #endif
   while (numBytes)
   {
@@ -161,20 +164,22 @@ uint8_t USART_read(char *dataPointer, uint8_t numBytes)
       dataPointer++;
       numBytes--;
       bytesRead++;
-#ifdef TIMER2_TIMER2_IN_USE
-      Timer2_read(&lastRead);
-#endif
     }
     else 
     {
       /* we just wait until enough data is received */
-#ifdef TIMER2_TIMER2_IN_USE
-      Timer2_read(&currentTime);
-      if (
-#endif
     }
   }
   return bytesRead;
+}
+
+/**
+ * Returns number of bytes in RxRingBuffer
+ * @return Number of bytes in RxRingBuffer
+*/
+uint8_t USART_numBytesInRxBuffer()
+{
+  return (USART_RxRingBuffer.head - USART_RxRingBuffer.tail) % USART_RING_BUFFER_SIZE;
 }
   
 /**
