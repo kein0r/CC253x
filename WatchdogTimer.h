@@ -44,6 +44,9 @@
 #define WDT_INT_CLOCKTIMES512                   (uint8_t)0x02   /* Clock period × 512 (~15.625 ms) */
 #define WDT_INT_CLOCKTIMES64                    (uint8_t)0x03   /* Clock period × 64 (~1.9 ms) */
 #define WDT_INT_MASK                            (uint8_t)0x03
+   
+#define WDT_TRIGGER_SEQUENCE1                   (uint8_t)0xa0
+#define WDT_TRIGGER_SEQUENCE2                   (uint8_t)0x50
 
 /*******************| Type definitions |*******************************/
 
@@ -54,6 +57,7 @@
 /*******************| Function prototypes |****************************/
 
 void WDT_init(uint8_t watchDogMode);
+void WDT_trigger();
 
 #endif
 /** @}*/

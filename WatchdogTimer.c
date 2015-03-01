@@ -36,6 +36,9 @@
 /*******************| Function definition |****************************/
 
 /** 
+ * Initializes watchdog timer (WDT) module
+ * @param watchdogMode Value for WDCTL.MODE. One of #WDT_MODE_IDLE, #WDT_MODE_TIMERMODE or
+ * #WDT_MODE_WATCHDOGMODE
 */
 void WDT_init(uint8_t watchdogMode)
 {
@@ -44,5 +47,13 @@ void WDT_init(uint8_t watchdogMode)
   WDCTL |= (watchdogMode & WDT_INT_MASK) | WDT_MODE_WATCHDOGMODE;
 }
 
+/**
+ * Triggers watchdog by writing 0xa and 0x5 in in WDCTL.CLR
+ */
+inline void WDT_trigger()
+{
+  WDCTL = WDT_TRIGGER_SEQUENCE1;
+  WDCTL = WDT_TRIGGER_SEQUENCE2;
+}
 
 /** @}*/
