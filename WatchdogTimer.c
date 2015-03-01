@@ -37,9 +37,11 @@
 
 /** 
 */
-void WDT_init()
+void WDT_init(uint8_t watchdogMode)
 {
-
+  /* Set watchdog to idle just in case it was in watchdog or timer mode before */
+  WDCTL = WDT_MODE_IDLE;
+  WDCTL |= (watchdogMode & WDT_INT_MASK) | WDT_MODE_WATCHDOGMODE;
 }
 
 
