@@ -62,12 +62,15 @@
 #define SWAP_UINT64(x)
 
 /*******************| Type definitions |*******************************/
+/**
+ Struct for easier access of sleep timer. 
+*/
 typedef union {
   uint32_t value;
   struct {
-    uint8_t ST2;
-    uint8_t ST1;
     uint8_t ST0;
+    uint8_t ST1;
+    uint8_t ST2;
   } ;
 } sleepTimer_t;
 
