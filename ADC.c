@@ -46,16 +46,29 @@ void ADC_init(uint8_t adcPinMode)
   APCFG = adcPinMode;
 }
 
+/**
+ * Checks EOC bit of ADCCON1 for if conversion is complete
+ * @return Returns 0 if conversion is still on-going, <> 0 if conversion is complete
+*/
 inline uint8_t ADC_isConversionComplete()
 {
   return ADCCON1 & ADCCON1_EOC_CONVERSIONCOMPLETE;
 }
 
+/**
+ * Starts ADC conversion sequence by setting ADCCON1 ST bit.
+*/
 inline uint8_t ADC_startConversionSequence()
 {
   return ADCCON1 |= ADCCON1_ST_STARTCONVERSIONSEQUENCE;
 }
 
+/**
+ * Sets sequence start event for ADC sequence conversion
+ * @param sequenceStartEvent Event to start a new sequence. Only one of ADCCON1_STSEL_EXTERNALTRIGGER_P20,
+ * ADCCON1_STSEL_FULLSPEED_NOTRIGGER, ADCCON1_STSEL_TIMER1COMPAREEVENT or ADCCON1_STSEL_ADCON1STEL
+ * should be used as parameter.
+*/
 inline void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent)
 {
   sequenceStartEvent &= ADCCON1_STSEL;
