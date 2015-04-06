@@ -39,7 +39,7 @@
  * Initializes the ADC module by configuring the pins given in adcPinMode
  * to ADC input
  * @param adcPinMode A logical one will configure the corresponding pin ad
- * adc input
+ * adc input. Sum of one or more of APCFG_ADCINPUT0 to APCFG_ADCINPUT7
 */
 void ADC_init(uint8_t adcPinMode)
 {

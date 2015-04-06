@@ -27,14 +27,14 @@
 #include <Config.h>
    
 /*******************| Macros |*****************************************/
-#define APCFG_ADCInput0                                 0x01
-#define APCFG_ADCInput1                                 0x02
-#define APCFG_ADCInput2                                 0x04
-#define APCFG_ADCInput3                                 0x08
-#define APCFG_ADCInput4                                 0x10
-#define APCFG_ADCInput5                                 0x20
-#define APCFG_ADCInput6                                 0x40
-#define APCFG_ADCInput7                                 0x80
+#define APCFG_ADCINPUT0                                 0x01
+#define APCFG_ADCINPUT1                                 0x02
+#define APCFG_ADCINPUT2                                 0x04
+#define APCFG_ADCINPUT3                                 0x08
+#define APCFG_ADCINPUT4                                 0x10
+#define APCFG_ADCINPUT5                                 0x20
+#define APCFG_ADCINPUT6                                 0x40
+#define APCFG_ADCINPUT7                                 0x80
 
 #define ADCCON1_EOC                                     0x80
 #define ADCCON1_EOC_CONVERSIONCOMPLETE                  0x80
