@@ -77,12 +77,14 @@ inline void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent)
 }
 
 /**
+ * Configures ADC sequence conversion by means of setting ADCCON2 register
  * From User Guide (swru191c.pdf):
  * The conversion sequence can be influenced with the APCFG register (see Section 7.6.6), in that the eight
  * analog inputs to the ADC come from I/O pins that are not necessarily programmed to be analog inputs. If
  * a channel should normally be part of a sequence, but the corresponding analog input is disabled in the
  * APCFG register, then that channel is skipped. When using differential inputs, both pins in a differential pair
  * must set as analog input pins in the APCFG register.
+ * @para config Value for ADCCON2 register. Must from ADCCON2_ defines
 */
 inline void ADC_setSequenceConversion(uint8_t config)
 {
