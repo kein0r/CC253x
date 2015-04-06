@@ -34,8 +34,62 @@
 /*******************| Global variables |*******************************/
 
 /*******************| Function definition |****************************/
-void ADC_init()
+
+/**
+ * Initializes the ADC module by configuring the pins given in adcPinMode
+ * to ADC input
+ * @param adcPinMode A logical one will configure the corresponding pin ad
+ * adc input
+*/
+void ADC_init(uint8_t adcPinMode)
 {
+  APCFG = adcPinMode;
+}
+
+inline uint8_t ADC_isConversionComplete()
+{
+  return ADCCON1 & ADCCON1_EOC_CONVERSIONCOMPLETE;
+}
+
+inline uint8_t ADC_startConversionSequence()
+{
+  return ADCCON1 |= ADCCON1_ST_STARTCONVERSIONSEQUENCE;
+}
+
+inline void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent)
+{
+  sequenceStartEvent &= ADCCON1_STSEL;
+  ADCCON1 &= ~ADCCON1_STSEL;
+  ADCCON1 |= sequenceStartEvent;
+}
+
+/**
+ * From User Guide (swru191c.pdf):
+ * The conversion sequence can be influenced with the APCFG register (see Section 7.6.6), in that the eight
+ * analog inputs to the ADC come from I/O pins that are not necessarily programmed to be analog inputs. If
+ * a channel should normally be part of a sequence, but the corresponding analog input is disabled in the
+ * APCFG register, then that channel is skipped. When using differential inputs, both pins in a differential pair
+ * must set as analog input pins in the APCFG register.
+*/
+inline void ADC_setSequenceConversion(uint8_t config)
+{
+  ADCCON2 = config;
+}
+
+/**
+ * Sets ADCCON3 register according to value provided and starts conversion
+ * @param config Value to be passed to ADCCON3 register. only #defines prefixed 
+ * ADCCON3_ should be used to call this function.
+
+ * From User Guide (swru191c.pdf):
+ * In addition to this sequence of conversions, the ADC can be programmed to perform a single conversion
+ * from any channel. Such a conversion is triggered by writing to the ADCCON3 register. The conversion
+ * starts immediately unless a conversion sequence is already ongoing, in which case the single conversion
+ * is performed as soon as that sequence is finished.
+*/
+inline void ADC_startSingleConversion(uint8_t config)
+{
+  ADCCON3 = config;
 }
 
 /** @}*/
