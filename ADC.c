@@ -23,6 +23,7 @@
 
 /*******************| Inclusions |*************************************/
 #include <ADC.h>
+#include <CC253x.h>
 #include <ioCC2530.h>
    
 /*******************| Macros |*****************************************/
@@ -50,7 +51,7 @@ void ADC_init(uint8_t adcPinMode)
  * Checks EOC bit of ADCCON1 for if conversion is complete
  * @return Returns 0 if conversion is still on-going, <> 0 if conversion is complete
 */
-inline uint8_t ADC_isConversionComplete()
+uint8_t ADC_isConversionComplete()
 {
   return ADCCON1 & ADCCON1_EOC_CONVERSIONCOMPLETE;
 }
@@ -58,7 +59,7 @@ inline uint8_t ADC_isConversionComplete()
 /**
  * Starts ADC conversion sequence by setting ADCCON1 ST bit.
 */
-inline uint8_t ADC_startConversionSequence()
+uint8_t ADC_startConversionSequence()
 {
   return ADCCON1 |= ADCCON1_ST_STARTCONVERSIONSEQUENCE;
 }
@@ -69,7 +70,7 @@ inline uint8_t ADC_startConversionSequence()
  * ADCCON1_STSEL_FULLSPEED_NOTRIGGER, ADCCON1_STSEL_TIMER1COMPAREEVENT or ADCCON1_STSEL_ADCON1STEL
  * should be used as parameter.
 */
-inline void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent)
+void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent)
 {
   sequenceStartEvent &= ADCCON1_STSEL;
   ADCCON1 &= ~ADCCON1_STSEL;
@@ -86,7 +87,7 @@ inline void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent)
  * must set as analog input pins in the APCFG register.
  * @para config Value for ADCCON2 register. Must from ADCCON2_ defines
 */
-inline void ADC_setSequenceConversion(uint8_t config)
+void ADC_setSequenceConversion(uint8_t config)
 {
   ADCCON2 = config;
 }
@@ -102,9 +103,18 @@ inline void ADC_setSequenceConversion(uint8_t config)
  * starts immediately unless a conversion sequence is already ongoing, in which case the single conversion
  * is performed as soon as that sequence is finished.
 */
-inline void ADC_startSingleConversion(uint8_t config)
+void ADC_startSingleConversion(uint8_t config)
 {
   ADCCON3 = config;
+}
+
+/**
+ * Connects one of the ADC channels to internal temperature sensor
+ */
+void ADC_connectTemperaturSensorToADC()
+{
+  TR0 = TR0_ADCTM_CONNECTTEMPERATURESENSOR;
+  ATEST = ATEST_ATEST_CTRL_ENABLETEMPERATURESENSOR;
 }
 
 /** @}*/

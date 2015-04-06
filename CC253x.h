@@ -53,6 +53,9 @@
 #define SLEEPSTA_RST_CLOCKLOSSRESET                     (uint8_t)0x18   /* 11: Clock loss reset */
 #define SLEEPSTA_RST_MASK                               (uint8_t)0x18
 
+#define ATEST_ATEST_CTRL                                0x3f
+#define ATEST_ATEST_CTRL_ENABLETEMPERATURESENSOR        0x01
+
 #define SleepTimerInterruptEnable()                     STIE = 0x1
 #define SleepTimerInterruptDisable()                    STIE = 0x0
 #define SleepTimerInterruptClearFlag()                  STIF = 0x0

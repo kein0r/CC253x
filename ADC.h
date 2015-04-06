@@ -103,6 +103,8 @@
 #define ADCCON3_SCH_RESERVED                            0x0d
 #define ADCCON3_SCH_TEMPERATURESENSOR                   0x0e
 #define ADCCON3_SCH_VDD3                                0x0f
+    
+#define TR0_ADCTM_CONNECTTEMPERATURESENSOR              0x01
 
 /*******************| Type definitions |*******************************/
 
@@ -113,11 +115,12 @@
 /*******************| Function prototypes |****************************/
 
 void ADC_init(uint8_t adcPinMode);
-inline uint8_t ADC_isConversionComplete();
-inline uint8_t ADC_startConversionSequence();
-inline void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent);
-inline void ADC_setSequenceConversion(uint8_t config);
-inline void ADC_startSingleConversion(uint8_t config);
+uint8_t ADC_isConversionComplete();
+uint8_t ADC_startConversionSequence();
+void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent);
+void ADC_setSequenceConversion(uint8_t config);
+void ADC_startSingleConversion(uint8_t config);
+void ADC_connectTemperaturSensorToADC();
 
 #endif
 /** @}*/
