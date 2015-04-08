@@ -114,13 +114,14 @@
 
 /*******************| Function prototypes |****************************/
 
-void ADC_init(uint8_t adcPinMode);
+void ADC_init(uint8_t adcPinMode, uint8_t stsel);
 uint8_t ADC_isConversionComplete();
 uint8_t ADC_startConversionSequence();
 void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent);
 void ADC_setSequenceConversion(uint8_t config);
 void ADC_startSingleConversion(uint8_t config);
 void ADC_connectTemperaturSensorToADC();
+uint16_t ADC_readSingleConversionValue();
 
 #endif
 /** @}*/

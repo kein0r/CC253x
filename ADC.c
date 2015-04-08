@@ -41,10 +41,18 @@
  * to ADC input
  * @param adcPinMode A logical one will configure the corresponding pin ad
  * adc input. Sum of one or more of APCFG_ADCINPUT0 to APCFG_ADCINPUT7
+ * @param Event trigger for new conversion sequence. One of ADCCON1_STSEL_EXTERNALTRIGGER_P20,
+ * ADCCON1_STSEL_FULLSPEED_NOTRIGGER, ADCCON1_STSEL_TIMER1COMPAREEVENT or 
+ * ADCCON1_STSEL_ADCON1STEL (default)
 */
-void ADC_init(uint8_t adcPinMode)
+void ADC_init(uint8_t adcPinMode, uint8_t stsel)
 {
   APCFG = adcPinMode;
+  stsel &= ADCCON1_STSEL;
+  /* lowest two bit of ADCCON1.STSEL should always be set to one. All other bits will be 
+   * set with their reset value */
+  stsel |= 0x03;
+  ADCCON1 = stsel;
 }
 
 /**
@@ -116,5 +124,18 @@ void ADC_connectTemperaturSensorToADC()
   TR0 = TR0_ADCTM_CONNECTTEMPERATURESENSOR;
   ATEST = ATEST_ATEST_CTRL_ENABLETEMPERATURESENSOR;
 }
+
+/**
+ * Reads the result of the last single conversion from register
+ * @return value of last single conversion. Register ADCH:ADCL as one uint16_t value
+ */
+uint16_t ADC_readSingleConversionValue()
+{
+  uint16_t retVal;
+  retVal = ADCL;
+  retVal |= ((uint16_t) ADCH) << 8;
+  return retVal;
+}
+
 
 /** @}*/
