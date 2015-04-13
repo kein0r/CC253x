@@ -129,7 +129,7 @@ void ADC_connectTemperaturSensorToADC()
  * Reads the result of the last single conversion from register
  * @return value of last single conversion. Register ADCH:ADCL as one uint16_t value
  */
-uint16_t ADC_readSingleConversionValue()
+ADC_ADCValue_t ADC_readSingleConversionValue()
 {
   uint16_t retVal;
   retVal = ADCL;

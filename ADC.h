@@ -107,6 +107,7 @@
 #define TR0_ADCTM_CONNECTTEMPERATURESENSOR              0x01
 
 /*******************| Type definitions |*******************************/
+typedef sint16_t ADC_ADCValue_t;
 
 /*******************| Type definitions |*******************************/
 
@@ -121,7 +122,7 @@ void ADC_setConversionSequenceStartEvent(uint8_t sequenceStartEvent);
 void ADC_setSequenceConversion(uint8_t config);
 void ADC_startSingleConversion(uint8_t config);
 void ADC_connectTemperaturSensorToADC();
-uint16_t ADC_readSingleConversionValue();
+ADC_ADCValue_t ADC_readSingleConversionValue();
 
 #endif
 /** @}*/
