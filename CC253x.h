@@ -10,6 +10,19 @@
    
 /*******************| Macros |*****************************************/
 #define nop()  asm("NOP") 
+
+/* 
+ * Direction of I/O port pins
+*/
+#define Px_PINOUTPUT                                    (uint8_t)1
+#define Px_PININPUT                                     (uint8_t)0
+
+/** 
+ * Logic level of I/O pins
+*/
+#define Px_HIGH                                         (uint8_t)1
+#define Px_LOW                                          (uint8_t)0
+
    
 /**
  * For easier setting and reading of clock settings
