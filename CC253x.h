@@ -23,6 +23,39 @@
 #define Px_HIGH                                         (uint8_t)1
 #define Px_LOW                                          (uint8_t)0
 
+/** 
+ * Logic level of I/O pins
+*/
+#define Px_HIGH                                         (uint8_t)1
+#define Px_LOW                                          (uint8_t)0
+
+/** 
+ * Port interrupt control
+*/
+#define PICTL_PADSC_MAXIMUMDRIVESTRENGTH                (uint8_t)0x80
+#define PICTL_PADSC_MINIMUMDRIVESTRENGTH                (uint8_t)0x00
+#define PICTL_P2ICON_P0TOP4FALLINGEDGE                  (uint8_t)0x08
+#define PICTL_P2ICON_P0TOP4RISINGEDGE                   (uint8_t)0x00
+#define PICTL_P1ICONH_P4TOP7FALLINGEDGE                 (uint8_t)0x04
+#define PICTL_P1ICONH_P4TOP7RISINGEDGE                  (uint8_t)0x00
+#define PICTL_P1ICONL_P0TOP3FALLINGEDGE                 (uint8_t)0x02
+#define PICTL_P1ICONL_P0TOP3RISINGEDGE                  (uint8_t)0x00
+#define PICTL_P0ICON_P0TOP7FALLINGEDGE                  (uint8_t)0x01
+#define PICTL_P0ICON_P0TOP7RISINGEDGE                   (uint8_t)0x00
+
+/**
+ * Peripheral I/O pin mapping
+ */
+#define PERCFG_T1CFG_ALT2                               (uint8_t)0x40
+#define PERCFG_T1CFG_ALT1                               (uint8_t)0x00
+#define PERCFG_T3CFG_ALT2                               (uint8_t)0x20
+#define PERCFG_T3CFG_ALT1                               (uint8_t)0x00
+#define PERCFG_T4CFG_ALT2                               (uint8_t)0x10
+#define PERCFG_T4CFG_ALT1                               (uint8_t)0x00
+#define PERCFG_USART1_ALT2                              (uint8_t)0x20
+#define PERCFG_USART1_ALT1                              (uint8_t)0x00
+#define PERCFG_USART0_ALT2                              (uint8_t)0x10
+#define PERCFG_USART0_ALT1                              (uint8_t)0x00
    
 /**
  * For easier setting and reading of clock settings
