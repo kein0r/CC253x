@@ -43,9 +43,9 @@
 */
 void Timer1_startSynchronous(uint8_t mode, uint16_t overflowValue)
 {
-  /* stop the timer1 in case its already running */
+  /* stop the timer1 in case its already running. "If 00 is written to T1CTL.MODE, the counter 
+   * halts at its present value."*/
   T1CTL &= ~T1CTL_MODE;
-  T1CTL = mode & T1CTL_MASK;
   
   /* set module or up/down value for timer 1 */
   if (overflowValue != 0x0000)
@@ -56,9 +56,10 @@ void Timer1_startSynchronous(uint8_t mode, uint16_t overflowValue)
     T1CC0H = overflow.regs.T1CNTH;
     
   }
-  T2CTRL |= T2CTRL_RUN | T2CTRL_SYNC_32kHz | T2CTRL_LATCHMODE_COMBINED;
-  while (!(T2CTRL & T2CTRL_STATE_MASK)); /* Wait for next 32 kHz positive edge when timer 2 is started */
-}
+
+  /* Start timer1. "The counter is started when a value other than 00 is written to T1CTL.MODE."*/
+  T1CTL = mode & T1CTL_MASK;
+ }
 
 void Timer1_captureCompareChannel0(uint8_t mode)
 {
@@ -71,7 +72,6 @@ void Timer1_captureCompareChannel0(uint8_t mode)
 inline void Timer1_read(Timer1_t *timerPtr)
 {
   /* T1CNTH is latched when T1CNTL is read, meaning that T1CNTL must always be read first. */
-  T2MSEL = T2MSEL_T2MSEL_T2TIMER;
   timerPtr->regs.T1CNTL = T1CNTL;
   timerPtr->regs.T1CNTH = T1CNTH;
 }
