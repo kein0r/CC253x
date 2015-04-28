@@ -1,8 +1,8 @@
-/** @ingroup Timer2
+/** @ingroup Timer1
  * @{
  */
 /*
-  Copyright (c) 2014 Jan Rüdiger.  All right reserved.
+  Copyright (c) 2015 Jan Rüdiger.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@
 */
 
 /*******************| Inclusions |*************************************/
-#include <Timer2.h>
+#include <Timer1.h>
 #include <ioCC2530.h>
    
 /*******************| Macros |*****************************************/
@@ -36,40 +36,44 @@
 /*******************| Function definition |****************************/
 
 /** 
- * Initializes and starts timer 2. Timer 2 is always started synchronized
+ * Initializes and starts timer 1. Timer 1 is always started synchronized
  * to 32kHz oscilator
  * Also sets overflow if passed value is no equal to 0x0000
+ * @param overflowValue Overflow value for Timer1 if given value unequal to 0x0000
 */
-void Timer2_startSynchronous(uint16_t overflowValue)
+void Timer1_startSynchronous(uint8_t mode, uint16_t overflowValue)
 {
-  /* stop the timer2 in case its already running */
-  T2CTRL &= ~T2CTRL_RUN;
-  /* set period for timer 2 */
+  /* stop the timer1 in case its already running */
+  T1CTL &= ~T1CTL_MODE;
+  T1CTL = mode & T1CTL_MASK;
+  
+  /* set module or up/down value for timer 1 */
   if (overflowValue != 0x0000)
   {
-    Timer2_t overflow;
+    Timer1_t overflow;
     overflow.value = overflowValue;
-    T2MSEL = T2MSEL_T2MSEL_T2_PERIOD;
-    T2M0 = overflow.regs.T2M0;
-    T2M1 = overflow.regs.T2M1;
+    T1CC0L = overflow.regs.T1CNTL;
+    T1CC0H = overflow.regs.T1CNTH;
     
   }
   T2CTRL |= T2CTRL_RUN | T2CTRL_SYNC_32kHz | T2CTRL_LATCHMODE_COMBINED;
   while (!(T2CTRL & T2CTRL_STATE_MASK)); /* Wait for next 32 kHz positive edge when timer 2 is started */
 }
 
-/**
- * Readout for timer2
- * @param timerPtr Pointer to Timer2_t where the counter value should be copied to
-*/
-inline void Timer2_read(Timer2_t *timerPtr)
+void Timer1_captureCompareChannel0(uint8_t mode)
 {
-/* Timer 2 contains a 16-bit timer, which increments on each clock cycle. The counter value can be read
- * from registers T2M1:T2M0 with register T2MSEL.T2MSEL set to 000. Note that the register content in
- * T2M1 is latched when T2M0 is read, meaning that T2M0 must always be read first. */
+}
+
+/**
+ * Readout of timer1 value
+ * @param timerPtr Pointer to Timer1_t where the counter value should be copied to
+*/
+inline void Timer1_read(Timer1_t *timerPtr)
+{
+  /* T1CNTH is latched when T1CNTL is read, meaning that T1CNTL must always be read first. */
   T2MSEL = T2MSEL_T2MSEL_T2TIMER;
-  timerPtr->regs.T2M0 = T2M0;
-  timerPtr->regs.T2M1 = T2M1;
+  timerPtr->regs.T1CNTL = T1CNTL;
+  timerPtr->regs.T1CNTH = T1CNTH;
 }
 
 /** @}*/

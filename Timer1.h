@@ -1,8 +1,8 @@
-/** @ingroup Timer2
+/** @ingroup Timer1
  * @{
  */
-#ifndef TIMER2_H_
-#define TIMER2_H_
+#ifndef TIMER1_H_
+#define TIMER1_H_
 /*
   Copyright (c) 2014 Jan Rüdiger.  All right reserved.
 
@@ -21,30 +21,49 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
   Credits:
-  Parts of this code are inspired by Arduino hardware serial library.
 */
 /*******************| Inclusions |*************************************/
 #include <PlatformTypes.h>
-#include <Config.h>
    
 /*******************| Macros |*****************************************/
-#define T2CTRL_RUN                      0x01
-#define T2CTRL_SYNC_32MHz               0x00
-#define T2CTRL_SYNC_32kHz               0x02
-#define T2CTRL_STATE_MASK               0x04
-#define T2CTRL_LATCHMODE_SEPARATE       0x00
-#define T2CTRL_LATCHMODE_COMBINED       0x08
+#define T1CTL_DIV                               0x0c
+#define T1CTL_DIV_DIV1                          0x00
+#define T1CTL_DIV_DIV8                          0x04
+#define T1CTL_DIV_DIV32                         0x08
+#define T1CTL_DIV_DIV128                        0x0c
+#define T1CTL_MODE                              0x03
+#define T1CTL_MODE_OPERATIONSUSPENDED           0x00
+#define T1CTL_MODE_FREERUNNING                  0x01
+#define T1CTL_MODE_MODULO                       0x02
+#define T1CTL_MODE_UPDOWN                       0x03
+#define T1CTL_MASK                              (T1CTL_DIV | T1CTL_MODE)
+    
+#define T1STAT_OVFIF                            0x20
+#define T1STAT_CH4IF                            0x10
+#define T1STAT_CH3IF                            0x08
+#define T1STAT_CH2IF                            0x04
+#define T1STAT_CH1IF                            0x02
+#define T1STAT_CH0IF                            0x01
 
-#define T2MSEL_T2MSEL_MASK              0x7
-#define T2MSEL_T2MSEL_T2TIMER           0x0     /* timer count value */
-#define T2MSEL_T2MSEL_T2_CAP            0x1     /* timer capture */
-#define T2MSEL_T2MSEL_T2_PERIOD         0x2     /* timer period */
-#define T2MSEL_T2MSEL_T2_COMP1          0x3     /* timer compare 1 */
-#define T2MSEL_T2MSEL_T2_COMP2          0x04    /* timer compare 2 */
+#define T1CCTL0_RFIRQ_ENABLE                    0x80
+#define T1CCTL0_RFIRQ_DISABLE                   0x00
+#define T1CCTL0_IM                              0x40
+#define T1CCTL0_CMP                             0x38
+#define T1CCTL0_CMP_SETOUTPUTONCOMPARE          0x00
+#define T1CCTL0_CMP_CLEAROUTPUTONCOMPARE        0x08
+#define T1CCTL0_CMP_TOGGLEOUTPUTONCOMPARE       0x20
+#define T1CCTL0_CMP_SETOUTPUTONCOMPARECLEARON0  0x18
+#define T1CCTL0_CMP_CLEAROUTPUTONCOMPARESETON0  0x20
+#define T1CCTL0_CMP_RESERVED                    0x28
+#define T1CCTL0_CMP_RESERVED2                   0x30
+#define T1CCTL0_CMP_INITIALIZEOUTPUTPIN         0x38
+#define T1CCTL0_MODE_CAPTUREMODE                0x00
+#define T1CCTL0_MODE_COMPAREMODE                0x04
+#define T1CCTL0_
 
 /*******************| Type definitions |*******************************/
 /**
- * Structure to access T2Mx and T2MOVLx register. This will only work if
+ * Structure to access T1CNTx register. This will only work if
  * compiler is placing uint8_t on byte boundary. If not something like
  * #pragma pack must be used.
 */
@@ -52,18 +71,18 @@ typedef union
 {
   uint16_t value;
   struct {
-    uint8_t T2M0;
-    uint8_t T2M1;
+    uint8_t T1CNTL;
+    uint8_t T1CNTH;
   } regs;
-} Timer2_t;
+} Timer1_t;
 
 /*******************| Type definitions |*******************************/
 
 /*******************| Global variables |*******************************/
 
 /*******************| Function prototypes |****************************/
-void Timer2_init();
-void Timer2_read(Timer2_t *timerPtr);
+void Timer1_startSynchronous(uint8_t mode, uint16_t overflowValue);
+void Timer1_read(Timer1_t *timerPtr);
 
 #endif
 /** @}*/
