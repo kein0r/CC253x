@@ -23,11 +23,14 @@
 #define Px_HIGH                                         (uint8_t)1
 #define Px_LOW                                          (uint8_t)0
 
-/** 
- * Logic level of I/O pins
+
+/**
+* For easier access of the direction bits
 */
-#define Px_HIGH                                         (uint8_t)1
-#define Px_LOW                                          (uint8_t)0
+/* Port 0                                                                           */
+SFRBIT( P0DIRbits      ,  0xFD, P0DIR_7, P0DIR_6, P0DIR_5, P0DIR_4, P0DIR_3, P0DIR_2, P0DIR_1, P0DIR_0 )
+/* Port 1                                                                           */
+SFRBIT( P1DIRbits      ,  0xFE, P1DIR_7, P1DIR_6, P1DIR_5, P1DIR_4, P1DIR_3, P1DIR_2, P1DIR_1, P1DIR_0 )
 
 /** 
  * Port interrupt control
@@ -105,6 +108,27 @@
 #define SleepTimerInterruptEnable()                     STIE = 0x1
 #define SleepTimerInterruptDisable()                    STIE = 0x0
 #define SleepTimerInterruptClearFlag()                  STIF = 0x0
+
+/** 
+ * Macros for enabling/disabling all or one particular interrupt
+*/
+#define IEN0_EA         0x80
+#define enableInterrupt(reg, bit) reg |= bit
+#define disableInterrupt(reg, bit) reg &= ~bit
+#define enableAllInterrupt() enableInterrupt(IEN0, IEN0_EA)
+#define disableAllInterrupt() disableInterrupt(IEN0, IEN0_EA)
+
+/**
+ * Macro to check interrupt flag.
+*/
+#define checkInterruptFlag(reg, bit) reg & bit
+
+/**
+ * Macro to clear interrupt flag. See swru191c.pdf Chapter 2.5.1 why interrupt 
+ * flags are cleared as follows. Quote: "The source interrupt flags (with the
+ * exception of the USB controller interrupt flags) have the access mode R/W0"
+*/
+#define clearInterruptFlag(reg, bit) reg = ~bit
 
 #define SWAP_UINT16(x) ( ((x) << 8) | ((x) >> 8) )
 #define SWAP_UINT32(x)
