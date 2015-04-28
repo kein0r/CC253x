@@ -51,7 +51,7 @@
 #define T1CCTL0_CMP                             0x38
 #define T1CCTL0_CMP_SETOUTPUTONCOMPARE          0x00
 #define T1CCTL0_CMP_CLEAROUTPUTONCOMPARE        0x08
-#define T1CCTL0_CMP_TOGGLEOUTPUTONCOMPARE       0x20
+#define T1CCTL0_CMP_TOGGLEOUTPUTONCOMPARE       0x10
 #define T1CCTL0_CMP_SETOUTPUTONCOMPARECLEARON0  0x18
 #define T1CCTL0_CMP_CLEAROUTPUTONCOMPARESETON0  0x20
 #define T1CCTL0_CMP_RESERVED                    0x28
@@ -59,7 +59,11 @@
 #define T1CCTL0_CMP_INITIALIZEOUTPUTPIN         0x38
 #define T1CCTL0_MODE_CAPTUREMODE                0x00
 #define T1CCTL0_MODE_COMPAREMODE                0x04
-#define T1CCTL0_
+#define T1CCTL0_CAP_NOCOMPARE                   0x00
+#define T1CCTL0_CAP                             0x03
+#define T1CCTL0_CAP_CAPTUREONRISING             0x01
+#define T1CCTL0_CAP_CAPTUREONFALLING            0x02
+#define T1CCTL0_CAP_CAPTUREONALL                0x03
 
 /*******************| Type definitions |*******************************/
 /**
@@ -82,6 +86,17 @@ typedef union
 
 /*******************| Function prototypes |****************************/
 void Timer1_startSynchronous(uint8_t mode, uint16_t overflowValue);
+void Timer1_captureCompareChannel0(uint8_t mode);
+void Timer1_readCaptureCompareChannel0(Timer1_t *timerPtr);
+void Timer1_captureCompareChannel1(uint8_t mode);
+void Timer1_readCaptureCompareChannel1(Timer1_t *timerPtr);
+void Timer1_captureCompareChannel2(uint8_t mode);
+void Timer1_readCaptureCompareChannel2(Timer1_t *timerPtr);
+void Timer1_captureCompareChannel3(uint8_t mode);
+void Timer1_readCaptureCompareChannel3(Timer1_t *timerPtr);
+void Timer1_captureCompareChannel4(uint8_t mode);
+void Timer1_readCaptureCompareChannel4(Timer1_t *timerPtr);
+
 void Timer1_read(Timer1_t *timerPtr);
 
 #endif
