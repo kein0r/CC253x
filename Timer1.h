@@ -65,6 +65,86 @@
 #define T1CCTL0_CAP_CAPTUREONFALLING            0x02
 #define T1CCTL0_CAP_CAPTUREONALL                0x03
 
+#define T1CCTL1_RFIRQ_ENABLE                    0x80
+#define T1CCTL1_RFIRQ_DISABLE                   0x00
+#define T1CCTL1_IM                              0x40
+#define T1CCTL1_CMP                             0x38
+#define T1CCTL1_CMP_SETOUTPUTONCOMPARE          0x00
+#define T1CCTL1_CMP_CLEAROUTPUTONCOMPARE        0x08
+#define T1CCTL1_CMP_TOGGLEOUTPUTONCOMPARE       0x10
+#define T1CCTL1_CMP_SETOUTPUTONCOMPARECLEARON0  0x18
+#define T1CCTL1_CMP_CLEAROUTPUTONCOMPARESETON0  0x20
+#define T1CCTL1_CMP_CLEARWHENEQUALT1CC0         0x28
+#define T1CCTL1_CMP_SETWHENEQUALT1CC0           0x30
+#define T1CCTL1_CMP_INITIALIZEOUTPUTPIN         0x38
+#define T1CCTL1_MODE_CAPTUREMODE                0x00
+#define T1CCTL1_MODE_COMPAREMODE                0x04
+#define T1CCTL1_CAP_NOCOMPARE                   0x00
+#define T1CCTL1_CAP                             0x03
+#define T1CCTL1_CAP_CAPTUREONRISING             0x01
+#define T1CCTL1_CAP_CAPTUREONFALLING            0x02
+#define T1CCTL1_CAP_CAPTUREONALL                0x03
+
+#define T1CCTL2_RFIRQ_ENABLE                    0x80
+#define T1CCTL2_RFIRQ_DISABLE                   0x00
+#define T1CCTL2_IM                              0x40
+#define T1CCTL2_CMP                             0x38
+#define T1CCTL2_CMP_SETOUTPUTONCOMPARE          0x00
+#define T1CCTL2_CMP_CLEAROUTPUTONCOMPARE        0x08
+#define T1CCTL2_CMP_TOGGLEOUTPUTONCOMPARE       0x10
+#define T1CCTL2_CMP_SETOUTPUTONCOMPARECLEARON0  0x18
+#define T1CCTL2_CMP_CLEAROUTPUTONCOMPARESETON0  0x20
+#define T1CCTL2_CMP_CLEARWHENEQUALT1CC0         0x28
+#define T1CCTL2_CMP_SETWHENEQUALT1CC0           0x30
+#define T1CCTL2_CMP_INITIALIZEOUTPUTPIN         0x38
+#define T1CCTL2_MODE_CAPTUREMODE                0x00
+#define T1CCTL2_MODE_COMPAREMODE                0x04
+#define T1CCTL2_CAP_NOCOMPARE                   0x00
+#define T1CCTL2_CAP                             0x03
+#define T1CCTL2_CAP_CAPTUREONRISING             0x01
+#define T1CCTL2_CAP_CAPTUREONFALLING            0x02
+#define T1CCTL2_CAP_CAPTUREONALL                0x03
+
+#define T1CCTL3_RFIRQ_ENABLE                    0x80
+#define T1CCTL3_RFIRQ_DISABLE                   0x00
+#define T1CCTL3_IM                              0x40
+#define T1CCTL3_CMP                             0x38
+#define T1CCTL3_CMP_SETOUTPUTONCOMPARE          0x00
+#define T1CCTL3_CMP_CLEAROUTPUTONCOMPARE        0x08
+#define T1CCTL3_CMP_TOGGLEOUTPUTONCOMPARE       0x10
+#define T1CCTL3_CMP_SETOUTPUTONCOMPARECLEARON0  0x18
+#define T1CCTL3_CMP_CLEAROUTPUTONCOMPARESETON0  0x20
+#define T1CCTL3_CMP_CLEARWHENEQUALT1CC0         0x28
+#define T1CCTL3_CMP_SETWHENEQUALT1CC0           0x30
+#define T1CCTL3_CMP_INITIALIZEOUTPUTPIN         0x38
+#define T1CCTL3_MODE_CAPTUREMODE                0x00
+#define T1CCTL3_MODE_COMPAREMODE                0x04
+#define T1CCTL3_CAP_NOCOMPARE                   0x00
+#define T1CCTL3_CAP                             0x03
+#define T1CCTL3_CAP_CAPTUREONRISING             0x01
+#define T1CCTL3_CAP_CAPTUREONFALLING            0x02
+#define T1CCTL3_CAP_CAPTUREONALL                0x03
+
+#define T1CCTL4_RFIRQ_ENABLE                    0x80
+#define T1CCTL4_RFIRQ_DISABLE                   0x00
+#define T1CCTL4_IM                              0x40
+#define T1CCTL4_CMP                             0x38
+#define T1CCTL4_CMP_SETOUTPUTONCOMPARE          0x00
+#define T1CCTL4_CMP_CLEAROUTPUTONCOMPARE        0x08
+#define T1CCTL4_CMP_TOGGLEOUTPUTONCOMPARE       0x10
+#define T1CCTL4_CMP_SETOUTPUTONCOMPARECLEARON0  0x18
+#define T1CCTL4_CMP_CLEAROUTPUTONCOMPARESETON0  0x20
+#define T1CCTL4_CMP_CLEARWHENEQUALT1CC0         0x28
+#define T1CCTL4_CMP_SETWHENEQUALT1CC0           0x30
+#define T1CCTL4_CMP_INITIALIZEOUTPUTPIN         0x38
+#define T1CCTL4_MODE_CAPTUREMODE                0x00
+#define T1CCTL4_MODE_COMPAREMODE                0x04
+#define T1CCTL4_CAP_NOCOMPARE                   0x00
+#define T1CCTL4_CAP                             0x03
+#define T1CCTL4_CAP_CAPTUREONRISING             0x01
+#define T1CCTL4_CAP_CAPTUREONFALLING            0x02
+#define T1CCTL4_CAP_CAPTUREONALL                0x03
+
 /*******************| Type definitions |*******************************/
 /**
  * Structure to access T1CNTx register. This will only work if
