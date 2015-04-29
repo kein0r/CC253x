@@ -26,6 +26,12 @@
 #include <PlatformTypes.h>
    
 /*******************| Macros |*****************************************/
+/**
+ * interrupt flag bits 
+*/
+#define TIMIF_OVFIM                             0x20    /** Timer 1 overflow interrupt mask */
+#define IEN1_T1IE                               0x02    /** Timer 1 interrupt enable */
+
 #define T1CTL_DIV                               0x0c
 #define T1CTL_DIV_DIV1                          0x00
 #define T1CTL_DIV_DIV8                          0x04
