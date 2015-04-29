@@ -112,7 +112,7 @@ SFRBIT( P1DIRbits      ,  0xFE, P1DIR_7, P1DIR_6, P1DIR_5, P1DIR_4, P1DIR_3, P1D
 /** 
  * Macros for enabling/disabling all or one particular interrupt
 */
-#define IEN0_EA         0x80
+#define IEN0_EA                                         0x80
 #define enableInterrupt(reg, bit) reg |= bit
 #define disableInterrupt(reg, bit) reg &= ~bit
 #define enableAllInterrupt() enableInterrupt(IEN0, IEN0_EA)
