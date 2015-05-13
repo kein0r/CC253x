@@ -81,6 +81,13 @@ SFRBIT( P1DIRbits      ,  0xFE, P1DIR_7, P1DIR_6, P1DIR_5, P1DIR_4, P1DIR_3, P1D
 #define P0SEL_SELP0_0_GENERALPURPOSEIO                  (uint8_t)0x00
 
 /**
+ * Port 2 Direction and Port 0 Peripheral Priority Control
+ */
+#define P2DIR_PRIP0_USART0USART1TIMER1                  (uint8_t)0x00
+#define P2DIR_PRIP0_USART1USART0TIMER1                  (uint8_t)0x40
+#define P2DIR_PRIP0_TIMER1CH01USART1USART0TIMER1CH23    (uint8_t)0x80
+#define P2DIR_PRIP0_TIMER1CH23USART1USART0TIMER1CH01    (uint8_t)0xc0
+/**
  * For easier setting and reading of clock settings
 */
 #define CLKCONCMD_OSC32K_XOSC                           0x00
