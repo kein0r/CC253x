@@ -61,6 +61,26 @@ SFRBIT( P1DIRbits      ,  0xFE, P1DIR_7, P1DIR_6, P1DIR_5, P1DIR_4, P1DIR_3, P1D
 #define PERCFG_USART0_ALT1                              (uint8_t)0x00
    
 /**
+ * Port 0 Function Select
+ */
+#define P0SEL_SELP0_7_PERIPHERALFUNCTION                (uint8_t)0x80
+#define P0SEL_SELP0_7_GENERALPURPOSEIO                  (uint8_t)0x00
+#define P0SEL_SELP0_6_PERIPHERALFUNCTION                (uint8_t)0x40
+#define P0SEL_SELP0_6_GENERALPURPOSEIO                  (uint8_t)0x00
+#define P0SEL_SELP0_5_PERIPHERALFUNCTION                (uint8_t)0x20
+#define P0SEL_SELP0_5_GENERALPURPOSEIO                  (uint8_t)0x00
+#define P0SEL_SELP0_4_PERIPHERALFUNCTION                (uint8_t)0x10
+#define P0SEL_SELP0_4_GENERALPURPOSEIO                  (uint8_t)0x00
+#define P0SEL_SELP0_3_PERIPHERALFUNCTION                (uint8_t)0x08
+#define P0SEL_SELP0_3_GENERALPURPOSEIO                  (uint8_t)0x00
+#define P0SEL_SELP0_2_PERIPHERALFUNCTION                (uint8_t)0x04
+#define P0SEL_SELP0_2_GENERALPURPOSEIO                  (uint8_t)0x00
+#define P0SEL_SELP0_1_PERIPHERALFUNCTION                (uint8_t)0x02
+#define P0SEL_SELP0_1_GENERALPURPOSEIO                  (uint8_t)0x00
+#define P0SEL_SELP0_0_PERIPHERALFUNCTION                (uint8_t)0x01
+#define P0SEL_SELP0_0_GENERALPURPOSEIO                  (uint8_t)0x00
+
+/**
  * For easier setting and reading of clock settings
 */
 #define CLKCONCMD_OSC32K_XOSC                           0x00
